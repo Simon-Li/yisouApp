@@ -33,11 +33,19 @@ angular.module('starter.controllers', [])
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
+    var ref = new Firebase("https://hosty.firebaseIO.com");
+    ref.authWithPassword({
+      email    : $scope.loginData.username,
+      password : $scope.loginData.password
+    }, function(error, authData) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Authenticated successfully with payload:", authData);
+        $scope.closeLogin();
+      }
+    });
+
   };
 })
 
