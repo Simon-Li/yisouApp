@@ -1,0 +1,26 @@
+<ion-view view-title="Signup">
+<ion-content>
+  <ion-header-bar>
+    <h1 class="title">Register</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeSignup()">Close</button>
+    </div>
+  </ion-header-bar>
+  <form ng-submit="doSignup()">
+    <div class="list list-inset">
+      <label class="item item-input">
+        <input type="text" placeholder="Email" ng-model="signupData.username" required>
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="Password" ng-model="signupData.password" required>
+      </label>             
+      <label class="item item-input">
+        <input type="password" placeholder="Confirm Password" ng-model="signupData.confirmPassword" required>
+      </label>                     
+      <div>
+        <button class="button button-block button-positive" type="submit">Register</button>             
+      </div>
+    </div>
+  </form>    
+</ion-content>
+</ion-view>

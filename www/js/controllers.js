@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('appYiSou.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   
@@ -42,11 +42,16 @@ angular.module('starter.controllers', [])
         console.log(error);
       } else {
         console.log("Authenticated successfully with payload:", authData);
+        $scope.loginData.authResp = authData;
         $scope.closeLogin();
       }
     });
 
   };
+})
+
+.controller('SignupCtrl', function($scope) {
+  
 })
 
 .controller('PlaylistsCtrl', function($scope) {
