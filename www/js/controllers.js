@@ -61,8 +61,17 @@ angular.module('appYiSou.controllers', [])
   $scope.alert = '';
 
   $scope.doSignup = function(userInfo) {
+    console.log("%s, %s, %s", userInfo.username, userInfo.password, userInfo.confirmPassword)
+    if (userInfo.username.indexOf("@") === -1) {
+      $scope.alert = ">> Your username is invalid email";
+      return;
+    }
+    if (userInfo.password === undefined || userInfo.confirmPassword === undefined) {
+      $scope.alert = ">> Your passwords are empty";
+      return;
+    }
     if (userInfo.confirmPassword !== userInfo.password) {
-      $scope.alert = "Your passwords don't match!";
+      $scope.alert = ">> Your passwords don't match";
       return;
     }
     ref.createUser({

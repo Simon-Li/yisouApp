@@ -10,13 +10,13 @@
   <form ng-submit="doSignup(userInfo)">
     <div class="list list-inset">
       <label class="item item-input">
-        <input type="email" placeholder="Email" ng-model="userInfo.username" required>
+        <input type="text" placeholder="Email" ng-model="userInfo.username">
       </label>
       <label class="item item-input">
-        <input type="password" placeholder="Password" ng-model="userInfo.password" required>
+        <input type="password" placeholder="Password" ng-model="userInfo.password">
       </label>             
       <label class="item item-input">
-        <input type="password" placeholder="Confirm Password" ng-model="userInfo.confirmPassword" required>
+        <input type="password" placeholder="Confirm Password" ng-model="userInfo.confirmPassword">
       </label>
       <div ng-show="alert!==''">
         <p style="color: red; size=0.8em;">{{alert}}</p>
