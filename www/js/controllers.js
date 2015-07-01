@@ -4,7 +4,12 @@ angular.module('appYiSou.controllers', [])
   var ref = new Firebase("https://hosty.firebaseIO.com");
   $scope.authObj = $firebaseAuth(ref);
 
-  $scope.g_auth = null;
+  $scope.g_auth = $scope.authObj.$getAuth();
+  if ($scope.g_auth) {
+    console.log("Logged in as:", $scope.g_auth.uid);
+  } else {
+    console.log("User not logged in");
+  }
   
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -14,7 +19,7 @@ angular.module('appYiSou.controllers', [])
   //});
   
   // Form data for the login modal
-  $scope.loginData = {};
+
   $scope.alert = '';
 
   // Create the login modal that we will use later
@@ -40,20 +45,20 @@ angular.module('appYiSou.controllers', [])
   }
 
   // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-    if ($scope.loginData.username.indexOf("@") === -1) {
+  $scope.doLogin = function(loginData) {
+    console.log('Doing login', loginData);
+    if (loginData.username.indexOf("@") === -1) {
       $scope.alert = ">> Your username is invalid email";
       return;      
     }
-    if ($scope.loginData.password === undefined) {
+    if (loginData.password === undefined) {
       $scope.alert = ">> Your password is empty";
       return;
     }
 
     $scope.authObj.$authWithPassword({
-      email    : $scope.loginData.username,
-      password : $scope.loginData.password
+      email    : loginData.username,
+      password : loginData.password
     }).then(function(authData) {
       console.log("Authenticated successfully with payload:", authData.uid);
       $scope.g_auth = authData;
