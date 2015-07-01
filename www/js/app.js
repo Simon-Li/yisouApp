@@ -38,40 +38,42 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       }
     }
   })
-  .state('app.search', {
-    url: "/search",
+  .state('app.lists', {
+    url: "/lists",
     views: {
       'menuContent': {
-        templateUrl: "templates/search.html"
+        templateUrl: "templates/lists.html",
+        controller: 'ListsCtrl'
       }
     }
   })
-  .state('app.browse', {
-    url: "/browse",
+  .state('app.favoriates', {
+    url: "/favoriates",
     views: {
       'menuContent': {
-        templateUrl: "templates/browse.html"
+        templateUrl: "templates/favoriates.html",
+        controller: 'FavoriatesCtrl'
       }
     }
   })
-  .state('app.playlists', {
-    url: "/playlists",
+  .state('app.messages', {
+    url: "/messages",
     views: {
       'menuContent': {
-        templateUrl: "templates/playlists.html",
-        controller: 'PlaylistsCtrl'
+        templateUrl: "templates/messages.html",
+        controller: 'MessagesCtrl'
       }
     }
   })
-  .state('app.single', {
-    url: "/playlists/:playlistId",
+  .state('app.list', {
+    url: "/lists/:listId",
     views: {
       'menuContent': {
-        templateUrl: "templates/playlist.html",
-        controller: 'PlaylistCtrl'
+        templateUrl: "templates/list.html",
+        controller: 'ListCtrl'
       }
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/lists');
 });

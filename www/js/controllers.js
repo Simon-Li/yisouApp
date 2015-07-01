@@ -1,6 +1,6 @@
 angular.module('appYiSou.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $state, $ionicSideMenuDelegate) {
   
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -46,24 +46,52 @@ angular.module('appYiSou.controllers', [])
         $scope.closeLogin();
       }
     });
-
   };
+
+  $scope.enterSignup = function() {
+    $scope.closeLogin();
+    $ionicSideMenuDelegate.toggleLeft();
+    $state.go('app.signup');
+  };
+
 })
 
 .controller('SignupCtrl', function($scope) {
+  var ref = new Firebase("https://hosty.firebaseIO.com");
+  $scope.alert = '';
+
+  $scope.doSignup = function(userInfo) {
+    if (userInfo.confirmPassword !== userInfo.password) {
+      $scope.alert = "Your passwords don't match!";
+      return;
+    }
+    ref.createUser({
+      email   : userInfo.username,
+      password: userInfo.password
+    }, function(error, userData) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Successfully created user account: ", userData);
+        $scope.alert = '';
+        //$scope.login(userInfo);
+      }
+    });
+  }
+})
+
+.controller('ListsCtrl', function($scope) {
   
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('FavoriatesCtrl', function($scope) {
+  
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('MessagesCtrl', function($scope) {
+  
+})
+
+
+.controller('ListCtrl', function($scope, $stateParams) {
 });

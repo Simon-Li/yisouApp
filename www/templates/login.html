@@ -1,6 +1,6 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Make your own Hosty</h1>
+    <h1 class="title">Join Hosty</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeLogin()">Close</button>
     </div>
@@ -16,7 +16,7 @@
         </label>             
         <div>
           <button class="button button-block button-positive" type="submit">Sign in</button>             
-          <a class="button button-block button-balanced" nav-transition="none" href="#/app/signup">Join now</a>
+          <button class="button button-block button-balanced" menu-close ng-click="enterSignup()">Join now</button>
         </div>
         <ion-checkbox style="border: none;" ng-model="loginData.rememberUsername">Remember user name</ion-checkbox>
         <p class="text-center">
