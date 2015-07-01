@@ -14,7 +14,8 @@
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable">
       <h1 class="title">Your Hosty</h1>
-      <a class="button button-icon icon ion-log-in" ng-click="login()"></a>
+      <a ng-if="!g_auth" class="button button-icon icon ion-log-in" ng-click="login()"></a>
+      <a ng-if="g_auth" class="button button-icon icon ion-log-out" ng-click="logout()"></a>
     </ion-header-bar>
     <ion-content>
       <ion-list>

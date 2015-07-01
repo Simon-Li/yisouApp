@@ -1,6 +1,10 @@
 angular.module('appYiSou.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $state, $ionicSideMenuDelegate) {
+.controller('AppCtrl', function($scope, $firebaseAuth, $ionicModal, $state, $ionicSideMenuDelegate) {
+  var ref = new Firebase("https://hosty.firebaseIO.com");
+  $scope.authObj = $firebaseAuth(ref);
+
+  $scope.g_auth = null;
   
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -11,6 +15,7 @@ angular.module('appYiSou.controllers', [])
   
   // Form data for the login modal
   $scope.loginData = {};
+  $scope.alert = '';
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -29,22 +34,40 @@ angular.module('appYiSou.controllers', [])
     $scope.modal.show();
   };
 
+  $scope.logout = function() {
+    $scope.authObj.$unauth();
+    $scope.g_auth = null;
+  }
+
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
+    if ($scope.loginData.username.indexOf("@") === -1) {
+      $scope.alert = ">> Your username is invalid email";
+      return;      
+    }
+    if ($scope.loginData.password === undefined) {
+      $scope.alert = ">> Your password is empty";
+      return;
+    }
 
-    var ref = new Firebase("https://hosty.firebaseIO.com");
-    ref.authWithPassword({
+    $scope.authObj.$authWithPassword({
       email    : $scope.loginData.username,
       password : $scope.loginData.password
-    }, function(error, authData) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        $scope.loginData.authResp = authData;
-        $scope.closeLogin();
+    }).then(function(authData) {
+      console.log("Authenticated successfully with payload:", authData.uid);
+      $scope.g_auth = authData;
+      $scope.closeLogin();
+      $ionicSideMenuDelegate.toggleLeft();
+    }).catch(function(error) {
+      $scope.alert = error;
+      if (error.code === "INVALID_EMAIL") {
+        $scope.alert = ">> Your username email is invalid";
       }
+      if (error.code === "INVALID_PASSWORD") {
+        $scope.alert = ">> Your password is incorrect";
+      }        
+      console.error(error);
     });
   };
 
@@ -56,12 +79,12 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('SignupCtrl', function($scope) {
-  var ref = new Firebase("https://hosty.firebaseIO.com");
+.controller('SignupCtrl', function($scope, $state) {
+  //var ref = new Firebase("https://hosty.firebaseIO.com");
   $scope.alert = '';
 
   $scope.doSignup = function(userInfo) {
-    console.log("%s, %s, %s", userInfo.username, userInfo.password, userInfo.confirmPassword)
+    console.info("%s, %s, %s", userInfo.username, userInfo.password, userInfo.confirmPassword)
     if (userInfo.username.indexOf("@") === -1) {
       $scope.alert = ">> Your username is invalid email";
       return;
@@ -74,18 +97,27 @@ angular.module('appYiSou.controllers', [])
       $scope.alert = ">> Your passwords don't match";
       return;
     }
-    ref.createUser({
-      email   : userInfo.username,
+
+    $scope.authObj.$createUser({
+      email: userInfo.username,
       password: userInfo.password
-    }, function(error, userData) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Successfully created user account: ", userData);
-        $scope.alert = '';
-        //$scope.login(userInfo);
+    }).then(function(userData) {
+      console.log("User "+userData.uid+" created successfully!")
+      return $scope.authObj.$authWithPassword({
+        email: userInfo.username,
+        password: userInfo.password
+      });
+    }).then(function(authData) {
+      console.log("Logged in as: ", authData.uid);
+      $scope.g_auth = authData;
+      $state.go('app.lists');
+    }).catch(function(error) {
+      if (error.code === "EMAIL_TAKEN") {
+        $scope.alert = ">> The user name has been taken, please try another one";
       }
+      console.error("Error: ", error)
     });
+
   }
 })
 

@@ -9,11 +9,14 @@
     <form ng-submit="doLogin()">
       <div class="list list-inset">
         <label class="item item-input">
-          <input type="email" placeholder="Email" ng-model="loginData.username" required>
+          <input type="text" placeholder="Email" ng-model="loginData.username">
         </label>
         <label class="item item-input">
-          <input type="password" placeholder="Password" ng-model="loginData.password" required>
+          <input type="password" placeholder="Password" ng-model="loginData.password">
         </label>             
+        <div ng-show="alert!==''">
+          <p style="color: red; size=0.8em;">{{alert}}</p>
+        </div>
         <div>
           <button class="button button-block button-positive" type="submit">Sign in</button>             
           <button class="button button-block button-balanced" menu-close ng-click="enterSignup()">Join now</button>
