@@ -126,6 +126,10 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
+.controller('HomeCtrl', function($scope) {
+  
+})
+
 .controller('ListsCtrl', function($scope) {
   
 })
@@ -137,7 +141,6 @@ angular.module('appYiSou.controllers', [])
 .controller('MessagesCtrl', function($scope) {
   
 })
-
 
 .controller('ListCtrl', function($scope, $stateParams) {
 });

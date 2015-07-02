@@ -38,6 +38,15 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       }
     }
   })
+  .state('app.home', {
+    url: "/home",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/home.html",
+        controller: 'HomeCtrl'
+      }
+    }
+  })  
   .state('app.lists', {
     url: "/lists",
     views: {
@@ -75,5 +84,5 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/lists');
+  $urlRouterProvider.otherwise('/app/home');
 });

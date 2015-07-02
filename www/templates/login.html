@@ -2,7 +2,7 @@
   <ion-header-bar>
     <h1 class="title">Join Hosty</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
+      <a class="button button-icon icon ion-ios-close-empty" ng-click="closeLogin()"></a>
     </div>
   </ion-header-bar>
   <ion-content>
@@ -19,12 +19,21 @@
         </div>
         <div>
           <button class="button button-block button-positive" type="submit">Sign in</button>             
+<!--          
           <button class="button button-block button-balanced" menu-close ng-click="enterSignup()">Join now</button>
+-->          
         </div>
+<!--        
         <ion-checkbox style="border: none;" ng-model="loginData.rememberUsername">Remember user name</ion-checkbox>
-        <p class="text-center">
-          <a href="#/app/forgot-password">Forgot password</a>
-        </p>
+-->        
+        <div class="row">
+          <div class="col-45">
+            <a href="#/app/forgot-password" style="padding-left: 0px; text-decoration: none">Forgot password?</a>
+          </div>
+          <div class="col-55" style="margin-left: 170px;">
+            <a ng-click="enterSignup()" style="text-decoration: none">Join now</a>
+          </div>
+        </div>
       </div>
     </form>
   </ion-content>
