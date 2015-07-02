@@ -6,7 +6,8 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $state, loginModal) {
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -18,6 +19,19 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       StatusBar.styleDefault();
     }
   });
+
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
+    var requireLogin = toState.data.requireLogin;
+
+    if (requireLogin && $rootScope.g_auth === null) {
+      event.preventDefault();
+      loginModal.openModal();
+      console.log("login in dialog is opened!");
+      console.log("toState: %s, toParams: %s", toState.name, toParams.toString());
+      loginModal.saveToState(toState, toParams);
+    }
+  });
+
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -36,6 +50,9 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
         templateUrl: "templates/signup.html",
         controller: 'SignupCtrl'
       }
+    },
+    data: {
+      requireLogin: false
     }
   })
   .state('app.home', {
@@ -45,7 +62,10 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
         templateUrl: "templates/home.html",
         controller: 'HomeCtrl'
       }
-    }
+    },
+    data: {
+      requireLogin: false
+    }    
   })  
   .state('app.lists', {
     url: "/lists",
@@ -54,7 +74,10 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
         templateUrl: "templates/lists.html",
         controller: 'ListsCtrl'
       }
-    }
+    },
+    data: {
+      requireLogin: true
+    }    
   })
   .state('app.favoriates', {
     url: "/favoriates",
@@ -63,7 +86,10 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
         templateUrl: "templates/favoriates.html",
         controller: 'FavoriatesCtrl'
       }
-    }
+    },
+    data: {
+      requireLogin: true
+    }    
   })
   .state('app.messages', {
     url: "/messages",
@@ -72,7 +98,10 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
         templateUrl: "templates/messages.html",
         controller: 'MessagesCtrl'
       }
-    }
+    },
+    data: {
+      requireLogin: true
+    }    
   })
   .state('app.list', {
     url: "/lists/:listId",
@@ -81,8 +110,52 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
         templateUrl: "templates/list.html",
         controller: 'ListCtrl'
       }
-    }
+    },
+    data: {
+      requireLogin: true
+    }    
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
+})
+
+.service('loginModal', function($ionicModal, $rootScope, $q) {
+  var instance, toState, toParams;
+
+  return {
+    openModal: function() {
+      $ionicModal.fromTemplateUrl('templates/login.html')
+        .then(function(modal) {
+          instance = modal;
+          instance.show();
+        });
+    },
+    closeModal: function() {
+      instance.remove();
+      console.log("dialog removed")
+    },
+    login: function(loginData) {
+      var deferred = $q.defer();
+
+      $rootScope.authObj.$authWithPassword({
+        email    : loginData.username,
+        password : loginData.password
+      }).then(function(authData) {
+        deferred.resolve(authData);
+      }).catch(function(error) {
+        deferred.reject(error);
+      });
+      return deferred.promise;
+    },
+    saveToState: function(State, Params) {
+      toState = State;
+      toParams = Params;
+    },
+    getToState: function() {
+      return {
+        toState: toState,
+        toParams: toParams
+      };
+    }
+  }
 });

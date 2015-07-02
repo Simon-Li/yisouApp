@@ -1,12 +1,12 @@
 angular.module('appYiSou.controllers', [])
 
-.controller('AppCtrl', function($scope, $firebaseAuth, $ionicModal, $state, $ionicSideMenuDelegate) {
+.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth, loginModal) {
   var ref = new Firebase("https://hosty.firebaseIO.com");
-  $scope.authObj = $firebaseAuth(ref);
+  $rootScope.authObj = $firebaseAuth(ref);
 
-  $scope.g_auth = $scope.authObj.$getAuth();
-  if ($scope.g_auth) {
-    console.log("Logged in as:", $scope.g_auth.uid);
+  $rootScope.g_auth = $rootScope.authObj.$getAuth();
+  if ($rootScope.g_auth) {
+    console.log("Logged in as:", $rootScope.g_auth.uid);
   } else {
     console.log("User not logged in");
   }
@@ -17,32 +17,26 @@ angular.module('appYiSou.controllers', [])
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  
-  // Form data for the login modal
 
-  $scope.alert = '';
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
+  $scope.openLoginModal = function() {
+    loginModal.openModal();
   };
 
   $scope.logout = function() {
-    $scope.authObj.$unauth();
-    $scope.g_auth = null;
+    $rootScope.authObj.$unauth();
+    $rootScope.g_auth = null;
+    console.log("Logged out!")
   }
+
+})
+
+.controller('LoginModalCtrl', function($scope, $rootScope, $state, $ionicSideMenuDelegate, loginModal) {
+  $scope.alert = '';
+
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    loginModal.closeModal();
+  };
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function(loginData) {
@@ -51,19 +45,16 @@ angular.module('appYiSou.controllers', [])
       $scope.alert = ">> Your username is invalid email";
       return;      
     }
-    if (loginData.password === undefined) {
+    if (typeof loginData.password === 'undefined') {
       $scope.alert = ">> Your password is empty";
       return;
     }
-
-    $scope.authObj.$authWithPassword({
-      email    : loginData.username,
-      password : loginData.password
-    }).then(function(authData) {
+    loginModal.login(loginData).then(function(authData) {
       console.log("Authenticated successfully with payload:", authData.uid);
-      $scope.g_auth = authData;
+      $rootScope.g_auth = authData;
       $scope.closeLogin();
       $ionicSideMenuDelegate.toggleLeft();
+      $state.go(loginModal.getToState().toState.name, loginModal.getToState().toParams);
     }).catch(function(error) {
       $scope.alert = error;
       if (error.code === "INVALID_EMAIL") {
@@ -73,7 +64,9 @@ angular.module('appYiSou.controllers', [])
         $scope.alert = ">> Your password is incorrect";
       }        
       console.error(error);
-    });
+
+      $state.go('app.home');
+    })
   };
 
   $scope.enterSignup = function() {
@@ -85,7 +78,6 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('SignupCtrl', function($scope, $state) {
-  //var ref = new Firebase("https://hosty.firebaseIO.com");
   $scope.alert = '';
 
   $scope.doSignup = function(userInfo) {
@@ -114,8 +106,8 @@ angular.module('appYiSou.controllers', [])
       });
     }).then(function(authData) {
       console.log("Logged in as: ", authData.uid);
-      $scope.g_auth = authData;
-      $state.go('app.lists');
+      $rootScope.g_auth = authData;
+      $state.go('app.home');
     }).catch(function(error) {
       if (error.code === "EMAIL_TAKEN") {
         $scope.alert = ">> The user name has been taken, please try another one";
