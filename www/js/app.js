@@ -67,6 +67,18 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       requireLogin: false
     }    
   }) 
+  .state('app.home.add', {
+    url: "/add",
+    views: {
+      'homeContent': {
+        templateUrl: "templates/home.add.html",
+        controller: 'HomeAddCtrl'
+      }
+    },
+    data: {
+      requireLogin: true
+    }    
+  })   
   .state('app.account', {
     url: "/account",
     views: {

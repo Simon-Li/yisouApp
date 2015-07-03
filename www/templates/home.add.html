@@ -1,0 +1,37 @@
+<ion-view>
+<ion-content>
+  <form ng-submit="doSignup(userInfo)">
+    <div class="row">
+      <div class="col col-50">
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Beds
+        </div>
+        <select ng-model="spaceInfo.beds" ng-options="v for v in presetBedsNum"></select>        
+      </label>
+      </div>
+      <div class="col col-50">
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Beds
+        </div>
+        <select ng-model="spaceInfo.beds" ng-options="v for v in presetBedsNum"></select>        
+      </label>
+      </div>
+    </div>
+    <label class="item item-input">
+      <input type="password" placeholder="Password" ng-model="userInfo.password">
+    </label>             
+    <label class="item item-input">
+      <input type="password" placeholder="Confirm Password" ng-model="userInfo.confirmPassword">
+    </label>
+    <div ng-show="alert!==''">
+      <p style="color: red; size=0.8em;">{{alert}}</p>
+    </div>            
+    <div>
+      <button class="button button-block button-positive" type="submit">Register</button>             
+    </div>
+    
+  </form>
+</ion-content>
+</ion-view>

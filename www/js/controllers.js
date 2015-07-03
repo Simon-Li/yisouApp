@@ -124,6 +124,10 @@ angular.module('appYiSou.controllers', [])
   }  
 })
 
+.controller('HomeAddCtrl', function($scope) {
+  $scope.presetBedsNum = ['1 bed', '2 beds', '3 beds', '4 beds'];
+})
+
 .controller('ListsCtrl', function($scope) {
   
 })
