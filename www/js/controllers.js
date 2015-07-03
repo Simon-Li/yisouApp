@@ -122,6 +122,10 @@ angular.module('appYiSou.controllers', [])
   
 })
 
+.controller('AccountCtrl', function($scope) {
+  
+})
+
 .controller('ListsCtrl', function($scope) {
   
 })

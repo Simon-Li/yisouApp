@@ -66,7 +66,19 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
     data: {
       requireLogin: false
     }    
-  })  
+  }) 
+  .state('app.account', {
+    url: "/account",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/account.html",
+        controller: 'AccountCtrl'
+      }
+    },
+    data: {
+      requireLogin: true 
+    }    
+  }) 
   .state('app.lists', {
     url: "/lists",
     views: {
