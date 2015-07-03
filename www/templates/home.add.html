@@ -2,7 +2,7 @@
 <ion-content>
   <form ng-submit="doSignup(userInfo)">
     <div class="row">
-      <div class="col col-50">
+      <div class="col ">
       <label class="item item-input item-select">
         <div class="input-label">
           Beds
@@ -10,21 +10,25 @@
         <select ng-model="spaceInfo.beds" ng-options="v for v in presetBedsNum"></select>        
       </label>
       </div>
-      <div class="col col-50">
+      <div class="col ">
       <label class="item item-input item-select">
         <div class="input-label">
-          Beds
+          Baths
         </div>
-        <select ng-model="spaceInfo.beds" ng-options="v for v in presetBedsNum"></select>        
+        <select ng-model="spaceInfo.baths" ng-options="v for v in presetBathsNum"></select>        
       </label>
       </div>
     </div>
-    <label class="item item-input">
-      <input type="password" placeholder="Password" ng-model="userInfo.password">
-    </label>             
+    <div class="col col-100">
+      <label class="item item-input">
+        <input type="text" placeholder="Address" ng-model="userInfo.address">
+      </label>             
+    </div>
+    <div>
     <label class="item item-input">
       <input type="password" placeholder="Confirm Password" ng-model="userInfo.confirmPassword">
     </label>
+    </div>
     <div ng-show="alert!==''">
       <p style="color: red; size=0.8em;">{{alert}}</p>
     </div>            
