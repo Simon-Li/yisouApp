@@ -76,7 +76,7 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       }
     },
     data: {
-      requireLogin: true 
+      requireLogin: false
     }    
   }) 
   .state('app.lists', {

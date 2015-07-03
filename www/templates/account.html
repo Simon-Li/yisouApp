@@ -1,6 +1,16 @@
 <ion-view view-title="Account">
+  <ion-nav-bar class="bar-stable">
+  </ion-nav-bar>
+  
   <ion-content>
-    <h1>Account profile</h1>
+    <ion-list>
+      <ion-item class="item-icon-left" menu-close href="#/app/account"><i class="icon ion-ios-person-outline"></i>Account</ion-item>
+      <ion-item class="item-icon-left" menu-close href="#/app/settings"><i class="icon ion-ios-gear-outline"></i>Settings</ion-item>     
+    </ion-list>
+    <div>
+      <button ng-show="!g_auth" class="button button-block button-balanced" ng-click="openLoginModal()">Sign in</button>
+      <button ng-show="g_auth" class="button button-block button-calm" ng-click="logout()">Log out</button>
+    </div>
   </ion-content>
 </ion-view>
 

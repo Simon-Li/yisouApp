@@ -1,6 +1,6 @@
 <ion-modal-view ng-controller="LoginModalCtrl">
   <ion-header-bar>
-    <h1 class="title">Join Hosty</h1>
+    <h1 class="title">Join theHosty</h1>
     <div class="buttons">
       <a class="button button-icon icon ion-ios-close-empty" ng-click="closeLogin()"></a>
     </div>
@@ -19,21 +19,26 @@
         </div>
         <div>
           <button class="button button-block button-positive" type="submit">Sign in</button>             
-<!--          
-          <button class="button button-block button-balanced" menu-close ng-click="enterSignup()">Join now</button>
--->          
         </div>
-<!--        
-        <ion-checkbox style="border: none;" ng-model="loginData.rememberUsername">Remember user name</ion-checkbox>
--->        
+<!--
         <div class="row">
-          <div class="col-45">
+          <div class="col text-left">
             <a href="#/app/forgot-password" style="padding-left: 0px; text-decoration: none">Forgot password?</a>
           </div>
-          <div class="col-55" style="margin-left: 170px;">
+          <div class="col text-right">
             <a ng-click="enterSignup()" style="text-decoration: none">Join now</a>
           </div>
         </div>
+-->
+        <div class="button-bar">
+          <div class="col text-left">
+          <a href="#/app/forgot-password" style="color: black; text-decoration: none;">Forgot password?</a>
+          </div>
+          <div class="col text-right">
+          <a ng-click="enterSignup()" style="text-decoration: none">Join now</a>
+          </div>
+        </div>
+        
       </div>
     </form>
   </ion-content>

@@ -1,6 +1,6 @@
 angular.module('appYiSou.controllers', [])
 
-.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth, loginModal) {
+.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth) {
   var ref = new Firebase("https://hosty.firebaseIO.com");
   $rootScope.authObj = $firebaseAuth(ref);
 
@@ -17,16 +17,6 @@ angular.module('appYiSou.controllers', [])
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
-  $scope.openLoginModal = function() {
-    loginModal.openModal();
-  };
-
-  $scope.logout = function() {
-    $rootScope.authObj.$unauth();
-    $rootScope.g_auth = null;
-    console.log("Logged out!")
-  }
 
 })
 
@@ -122,8 +112,16 @@ angular.module('appYiSou.controllers', [])
   
 })
 
-.controller('AccountCtrl', function($scope) {
-  
+.controller('AccountCtrl', function($scope, $rootScope, loginModal) {
+  $scope.openLoginModal = function() {
+    loginModal.openModal();
+  };
+
+  $scope.logout = function() {
+    $rootScope.authObj.$unauth();
+    $rootScope.g_auth = null;
+    console.log("Logged out!")
+  }  
 })
 
 .controller('ListsCtrl', function($scope) {
