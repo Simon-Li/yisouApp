@@ -1,6 +1,13 @@
 <ion-view view-title="Listings">
   <ion-content>
-    <h1>Space Lists</h1>
+    <ion-list>
+      <ion-item ng-repeat="item in items" class="item-thumbnail-left">
+        <img ng-src="{{item.spaceInfo.photoUrl}}">
+        <p style="font-size: 12px;" flex>{{ item.spaceInfo.address}}</p>
+        <p style="font-size: 14px; color: red; font-weight: bold;" flex> {{ item.spaceInfo.price }} </p>
+        <p style="font-size: 12px;" flex> {{ item.spaceInfo.bedsNum+', '+item.spaceInfo.bathsNum }} </p>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>
 
