@@ -127,6 +127,8 @@ angular.module('appYiSou.controllers', [])
 .controller('HomeAddCtrl', function($scope) {
   $scope.presetBedsNum = ['1 bed', '2 beds', '3 beds', '4 beds'];
   $scope.presetBathsNum = ['1 bath', '2 baths', '3 baths'];
+  $scope.presetCity = ['Calgary', 'Vancouver', 'Toronto', 'Montreal'];
+  //$scope.spaceInfo.beds = "";
 })
 
 .controller('ListsCtrl', function($scope) {

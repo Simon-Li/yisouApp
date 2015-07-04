@@ -7,9 +7,9 @@
       <ion-item class="item-icon-left" menu-close href="#/app/account"><i class="icon ion-ios-person-outline"></i>Account</ion-item>
       <ion-item class="item-icon-left" menu-close href="#/app/settings"><i class="icon ion-ios-gear-outline"></i>Settings</ion-item>     
     </ion-list>
-    <div>
-      <button ng-show="!g_auth" class="button button-block button-balanced" ng-click="openLoginModal()">Sign in</button>
-      <button ng-show="g_auth" class="button button-block button-calm" ng-click="logout()">Log out</button>
+    <div class="row">
+      <button ng-show="!g_auth" class="button button-block button-positive" ng-click="openLoginModal()">Log in</button>
+      <button ng-show="g_auth" class="button button-block button-positive" ng-click="logout()">Log out</button>
     </div>
   </ion-content>
 </ion-view>

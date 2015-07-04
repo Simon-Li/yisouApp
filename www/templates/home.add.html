@@ -1,39 +1,47 @@
-<ion-view>
+<style>
+select {
+  border:0px;
+  outline:0px;
+}
+</style>
+<ion-view view-title="theHosty">
 <ion-content>
-  <form ng-submit="doSignup(userInfo)">
+  <form ng-submit="doSignup(spaceInfo)" >
+    <div class="row" style="line-height: 33px;">
+      <div class="col text-left item">Beds
+        <select ng-model="spaceInfo.beds" ng-options="item for item in presetBedsNum"></select>
+      </div>
+      <div class="col text-left item">Baths
+        <select ng-model="spaceInfo.baths" ng-options="v for v in presetBathsNum"></select>
+      </div>
+    </div>
+    <div class="row" style="line-height: 33px;">
+      <div class="col text-left item">City
+        <select ng-model="spaceInfo.city" ng-options="v for v in presetCity"></select>
+      </div>    
+    </div>
     <div class="row">
-      <div class="col ">
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Beds
-        </div>
-        <select ng-model="spaceInfo.beds" ng-options="v for v in presetBedsNum"></select>        
-      </label>
-      </div>
-      <div class="col ">
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Baths
-        </div>
-        <select ng-model="spaceInfo.baths" ng-options="v for v in presetBathsNum"></select>        
-      </label>
+      <div class="col text-left item item-input">
+        <input type="text" placeholder="Address" ng-model="spaceInfo.address">
       </div>
     </div>
-    <div class="col col-100">
-      <label class="item item-input">
-        <input type="text" placeholder="Address" ng-model="userInfo.address">
-      </label>             
+    <div class="row">
+      <div class="col text-left item item-input">
+        <input type="text" placeholder="Postcode" ng-model="spaceInfo.postcode">
+      </div>
     </div>
-    <div>
-    <label class="item item-input">
-      <input type="password" placeholder="Confirm Password" ng-model="userInfo.confirmPassword">
-    </label>
+    <div class="row">
+      <div class="col text-left item item-input">
+        <input type="text" placeholder="Price" ng-model="spaceInfo.price">
+      </div>
     </div>
-    <div ng-show="alert!==''">
-      <p style="color: red; size=0.8em;">{{alert}}</p>
-    </div>            
-    <div>
-      <button class="button button-block button-positive" type="submit">Register</button>             
+    <div class="row">
+      <div ng-show="alert!==''">
+        <p style="color: red; size=0.8em;">{{alert}}</p>
+      </div>            
+    </div>
+    <div class="row">
+      <button class="button button-block button-positive" type="submit">Add</button>             
     </div>
     
   </form>

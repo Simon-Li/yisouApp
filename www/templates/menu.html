@@ -1,10 +1,15 @@
+<style>
+  .icon-green {
+    color: balanced;
+  }
+</style>
 <ion-nav-view name="menuContent"></ion-nav-view>
 <div class="tabs tabs-icon-top">
-  <a class="tab-item" href="#/app/home"><i class="icon ion-ios-home-outline"></i>theHosty</a>
-  <a class="tab-item" href="#/app/favoriates"><i class="icon ion-ios-star-outline"></i>Favorites</a>
+  <a class="tab-item" href="#/app/home" ng-class="{'balanced': $state.is('app.home')}"><i class="icon ion-ios-home-outline" ng-class="{'balanced': $state.is('app.home')}"></i>theHosty</a>
+  <a class="tab-item" href="#/app/favoriates" ng-class="{'balanced': $state.is('app.favoriates')}"><i class="icon ion-ios-star-outline" ng-class="{'balanced': $state.is('app.favoriates')}"></i>Favorites</a>
 <!--  
   <a class="tab-item" href="#/app/lists"><i class="icon ion-ios-list-outline"></i>Listings</a>
 -->  
-  <a class="tab-item" href="#/app/messages"><i class="icon ion-ios-chatboxes-outline"></i>Chats</a>
-  <a class="tab-item" href="#/app/account"><i class="icon ion-ios-person-outline"></i>Me</a>
+  <a class="tab-item" href="#/app/messages" ng-class="{'balanced': $state.is('app.messages')}"><i class="icon ion-ios-chatboxes-outline" ng-class="{'balanced': $state.is('app.messages')}"></i>Chats</a>
+  <a class="tab-item" href="#/app/account" ng-class="{'balanced': $state.is('app.account')}"><i class="icon ion-ios-person-outline" ng-class="{'balanced': $state.is('app.account')}"></i>Me</a>
 </div>

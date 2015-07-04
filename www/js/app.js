@@ -6,7 +6,9 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
 
-.run(function($ionicPlatform, $rootScope, $state, loginModal) {
+.run(function($ionicPlatform, $rootScope, $state, $stateParams, loginModal) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
