@@ -53,9 +53,12 @@ angular.module('appYiSou.controllers', [])
       if (error.code === "INVALID_PASSWORD") {
         $scope.alert = ">> Your password is incorrect";
       }        
+      if (error.code === "INVALID_USER") {
+        $scope.alert = ">> The user name is not existed";
+      }      
       console.error(error);
 
-      $state.go('app.home');
+      $state.go('app.home.root');
     })
   };
 
@@ -97,7 +100,7 @@ angular.module('appYiSou.controllers', [])
     }).then(function(authData) {
       console.log("Logged in as: ", authData.uid);
       $rootScope.g_auth = authData;
-      $state.go('app.home');
+      $state.go('app.home.root');
     }).catch(function(error) {
       if (error.code === "EMAIL_TAKEN") {
         $scope.alert = ">> The user name has been taken, please try another one";
@@ -124,11 +127,50 @@ angular.module('appYiSou.controllers', [])
   }  
 })
 
-.controller('HomeAddCtrl', function($scope) {
+.controller('HomeRootCtrl', 
+  function($scope) {
+
+})
+
+.controller('HomeAddCtrl', function($scope, $rootScope, $state, fbListings) {
   $scope.presetBedsNum = ['1 bed', '2 beds', '3 beds', '4 beds'];
   $scope.presetBathsNum = ['1 bath', '2 baths', '3 baths'];
   $scope.presetCity = ['Calgary', 'Vancouver', 'Toronto', 'Montreal'];
-  //$scope.spaceInfo.beds = "";
+  $scope.fbListings = fbListings;
+  
+  $scope.goBack = function() {
+    $state.go("app.home.root");
+    console.log("goBack to the Home view")
+  }
+
+  $scope.add = function(spaceInfo) {
+    console.log("space listing length: %s", $scope.fbListings.length);
+    var elem = {
+      "listId": "",
+      "ownerId": $rootScope.g_auth.password.email,
+      "listDate": _.now(),
+      "spaceInfo": {
+        "address": spaceInfo.address,
+        "city": spaceInfo.city,
+        "postcode": spaceInfo.postcode,
+        "price": spaceInfo.price, 
+        "bedsNum": spaceInfo.beds,
+        "bathsNum": spaceInfo.baths,
+        "photoUrl": ""
+      }      
+    };
+    $scope.fbListings.$add(elem).then(function(ref) {
+      var key = ref.key();
+      var rec = $scope.fbListings.$getRecord(key);
+      rec.listId = key;
+      $scope.fbListings.$save(rec).then(function(ref) {
+        ref.key() === rec.$id;
+      });
+      console.log("added record with fb_id: " + key + ", listId: " + rec.listId);
+      $state.go("app.home.root");
+    });
+  }
+
 })
 
 .controller('ListsCtrl', function($scope) {
@@ -144,4 +186,20 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('ListCtrl', function($scope, $stateParams) {
+
+})
+
+.controller('ProfileCtrl', function($scope, $state) {
+  $scope.goBack = function() {
+    $state.go("app.account");
+    console.log("Back to the account view")
+  }
+})
+
+.controller('SettingsCtrl', function($scope, $state) {
+  $scope.goBack = function() {
+    $state.go("app.account");
+    console.log("Back to the account view")
+  }
 });
+

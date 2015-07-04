@@ -69,7 +69,20 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       requireLogin: false
     }    
   }) 
+  .state('app.home.root', {
+    url: "/root",
+    views: {
+      'homeContent': {
+        templateUrl: "templates/home.root.html",
+        controller: 'HomeRootCtrl'
+      }
+    },
+    data: {
+      requireLogin: false
+    }    
+  })     
   .state('app.home.add', {
+    cache: false,
     url: "/add",
     views: {
       'homeContent': {
@@ -140,10 +153,41 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
     data: {
       requireLogin: true
     }    
+  })
+  .state('app.profile', {
+    url: "/profile",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/profile.html",
+        controller: 'ProfileCtrl'
+      }
+    },
+    data: {
+      requireLogin: true
+    }    
+  })
+  .state('app.settings', {
+    url: "/settings",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/settings.html",
+        controller: 'SettingsCtrl'
+      }
+    },
+    data: {
+      requireLogin: false
+    }    
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/home');
+  $urlRouterProvider.otherwise('/app/home/root');
 })
+
+.factory('fbListings', ['$firebaseArray', 
+  function($firebaseArray) {
+    var ref = new Firebase("https://hosty.firebaseIO.com/lists");
+    return $firebaseArray(ref);
+  }
+])
 
 .service('loginModal', function($ionicModal, $rootScope, $q) {
   var instance, toState, toParams;
