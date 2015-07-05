@@ -5,6 +5,13 @@
   .custom-paw-icon {
     font-size: 21px;
   }  
+  .item-content {
+    padding-bottom: 0px !important; 
+    padding-right: 5px !important;  
+    padding-top: 6px !important;
+  }
+
+}  
 </style>
 <ion-view view-title="Listings">
   <ion-nav-bar class="bar-stable">
@@ -14,8 +21,9 @@
   </ion-nav-bar>
 
   <ion-content>
-    <ion-list>
-      <ion-item ng-repeat="item in fbListings" class="item-thumbnail-left" style="padding-bottom: 4px;">
+    <ion-list show-delete="false" show-reorder="false" can-swipe="true">
+      <ion-item ng-repeat="item in fbListings" class="item-thumbnail-left">
+        
         <img ng-src="{{item.spaceInfo.photoUrl}}">
         <div class="row" style=" padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
           <div class="col col-80 text-left" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
@@ -48,6 +56,12 @@
             </ion-list>        
           </div>
         </div>
+
+        <ion-option-button class="button-positive" ng-click="share(item)">Share</ion-option-button>
+        <ion-option-button class="button-info" ng-click="edit(item)">Edit</ion-option-button>
+        <ion-delete-button class="ion-minus-circled" ng-click="items.splice($index, 1)"></ion-delete-button>
+        <ion-reorder-button class="ion-navicon" on-reorder="reorderItem(item, $fromIndex, $toIndex)"></ion-reorder-button>                  
+        
       </ion-item>
     </ion-list>
   </ion-content>
