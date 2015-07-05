@@ -1,11 +1,53 @@
+<style>
+  .custom-icon {
+    font-size: 18px;
+  }
+  .custom-paw-icon {
+    font-size: 21px;
+  }  
+</style>
 <ion-view view-title="Listings">
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-buttons side="right">
+      <a href="#/app/home/add" class="button button-icon icon ion-ios-plus-empty"></a>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="item in items" class="item-thumbnail-left">
+      <ion-item ng-repeat="item in fbListings" class="item-thumbnail-left" style="padding-bottom: 4px;">
         <img ng-src="{{item.spaceInfo.photoUrl}}">
-        <p style="font-size: 12px;" flex>{{ item.spaceInfo.address}}</p>
-        <p style="font-size: 14px; color: red; font-weight: bold;" flex> {{ item.spaceInfo.price }} </p>
-        <p style="font-size: 12px;" flex> {{ item.spaceInfo.bedsNum+', '+item.spaceInfo.bathsNum }} </p>
+        <div class="row" style=" padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
+          <div class="col col-80 text-left" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
+            <p style="font-size: 12px;" flex>{{ item.spaceInfo.address}}</p>
+            <p style="font-size: 13px; color: red; font-weight: bold;" flex> ${{ item.spaceInfo.price }} </p>
+            <p style="font-size: 12px;" flex> {{ item.spaceInfo.bedsNum+', '+item.spaceInfo.bathsNum }} </p>
+            <div class="button-bar" style="min-height: 20px; padding-top: -15px; padding-right: 0px; padding-bottom: -15px; padding-left: 2px;">
+              <a><i class="icon ion-ios-location-outline custom-icon" style="min-width: 24px;min-height: 20px;margin-left: 0px;margin-right: 8px;"></i></a>
+              <a><i class="icon ion-ios-star-outline custom-icon" style="min-width: 24px;min-height: 20px;margin-left: 8px;margin-right: 8px;"></i></a>
+              <a><i class="icon ion-ios-paw-outline custom-paw-icon" style="min-width: 24px;min-height: 20px;margin-left: 8px;margin-right: 8px;"></i></a>
+            </div>
+          </div>
+          <div class="col col-15 text-right" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
+            <ion-list>
+              <ion-item style="border: none;font-size: 12px;min-height: 12px;padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;line-height:12px;">
+              </ion-item>
+              <ion-item style="border: none;font-size: 12px;min-height: 12px;padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;line-height:12px;">
+              </ion-item>
+              <ion-item style="border: none;font-size: 12px;min-height: 12px;padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;line-height:12px;">
+              </ion-item>
+              <ion-item style="border: none;font-size: 12px;min-height: 12px;padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;line-height:12px;">
+              </ion-item>
+              <ion-item style="border: none;font-size: 12px;min-height: 10px;padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;line-height:12px;">
+              </ion-item>
+              <ion-item style="border: none;font-size: 12px;min-height: 10px;padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;line-height:12px;">
+              </ion-item>
+              <ion-item style="border: none;font-size: 10px;min-height: 12px;padding-left: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;line-height:12px;">
+                  {{"120"}} <br> views
+              </ion-item>
+            </ion-list>        
+          </div>
+        </div>
       </ion-item>
     </ion-list>
   </ion-content>

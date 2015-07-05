@@ -173,7 +173,8 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('ListsCtrl', function($scope) {
+.controller('ListsCtrl', function($scope, fbListings) {
+  $scope.fbListings = fbListings;
   
 })
 

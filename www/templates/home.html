@@ -1,17 +1,25 @@
 <style>
-    .arrow-down {
-         height:0px;
-         width:0px;
-         border:none;
-         border-top:5px solid #000000;
-         border-left:5px solid rgba(0,0,0,0);
-         border-right:5px solid rgba(0,0,0,0);
+  .arrow-down {
+    height:0px;
+    width:0px;
+    border:none;
+    border-top:5px solid #000000;
+    border-left:5px solid rgba(0,0,0,0);
+    border-right:5px solid rgba(0,0,0,0);
+  }
+  .custom-icon {
+    font-size: 24px;
+    color : black;
+  }  
 }
 </style>
 <ion-view view-title="theHosty">
   <ion-nav-bar class="bar-stable">
     <ion-nav-buttons side="right">
-      <a href="#/app/home/search" class="button button-icon icon ion-ios-search"></a>
+<!--    
+      <a href="#/app/home/search" class="button button-icon icon ion-ios-search custom-icon"></a>
+-->      
+      <a href="#/app/home/search" class="button" style="border: 0px;"><i class="icon ion-ios-search custom-icon"></i></a>
       <a href="#/app/home/add" class="button button-icon icon ion-ios-plus-empty"></a>
     </ion-nav-buttons>
     <ion-nav-buttons side="left">

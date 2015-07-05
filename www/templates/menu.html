@@ -1,15 +1,12 @@
 <style>
   .icon-green {
-    color: balanced;
+    color: green;
   }
 </style>
 <ion-nav-view name="menuContent"></ion-nav-view>
 <div class="tabs tabs-icon-top">
-  <a class="tab-item" href="#/app/home" ng-class="{'balanced': $state.is('app.home')}"><i class="icon ion-ios-home-outline" ng-class="{'balanced': $state.is('app.home')}"></i>theHosty</a>
-  <a class="tab-item" href="#/app/favoriates" ng-class="{'balanced': $state.is('app.favoriates')}"><i class="icon ion-ios-star-outline" ng-class="{'balanced': $state.is('app.favoriates')}"></i>Favorites</a>
-<!--  
-  <a class="tab-item" href="#/app/lists"><i class="icon ion-ios-list-outline"></i>Listings</a>
--->  
-  <a class="tab-item" href="#/app/messages" ng-class="{'balanced': $state.is('app.messages')}"><i class="icon ion-ios-chatboxes-outline" ng-class="{'balanced': $state.is('app.messages')}"></i>Chats</a>
-  <a class="tab-item" href="#/app/account" ng-class="{'balanced': $state.is('app.account')}"><i class="icon ion-ios-person-outline" ng-class="{'balanced': $state.is('app.account')}"></i>Me</a>
+  <a class="tab-item" href="#/app/home" ng-class="{'balanced': $state.is('app.home')}"><i ng-class="{'icon ion-ios-home balanced': $state.is('app.home'), 'icon ion-ios-home-outline': !$state.is('app.home')}"></i>theHosty</a>
+  <a class="tab-item" href="#/app/favoriates" ng-class="{'balanced': $state.is('app.favoriates')}"><i ng-class="{'icon ion-ios-star balanced': $state.is('app.favoriates'), 'icon ion-ios-star-outline': !$state.is('app.favoriates')}"></i>Favorites</a>
+  <a class="tab-item" href="#/app/messages" ng-class="{'balanced': $state.is('app.messages')}"><i ng-class="{'icon ion-ios-chatboxes balanced': $state.is('app.messages'), 'icon ion-ios-chatboxes-outline': !$state.is('app.messages')}"></i>Chats</a>
+  <a class="tab-item" href="#/app/account" ng-class="{'balanced': $state.is('app.account')}"><i ng-class="{'icon ion-ios-person balanced': $state.is('app.account'), 'icon ion-ios-person-outline': !$state.is('app.account')}"></i>Me</a>
 </div>
