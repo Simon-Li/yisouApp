@@ -70,8 +70,9 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('SignupCtrl', function($scope, $state) {
+.controller('SignupCtrl', function($scope, $rootScope, $state, fbUsers) {
   $scope.alert = '';
+  $scope.fbUsers = fbUsers;
 
   $scope.doSignup = function(userInfo) {
     console.info("%s, %s, %s", userInfo.username, userInfo.password, userInfo.confirmPassword)
@@ -79,7 +80,7 @@ angular.module('appYiSou.controllers', [])
       $scope.alert = ">> Your username is invalid email";
       return;
     }
-    if (userInfo.password === undefined || userInfo.confirmPassword === undefined) {
+    if (typeof userInfo.password === 'undefined' || typeof userInfo.confirmPassword === 'undefined') {
       $scope.alert = ">> Your passwords are empty";
       return;
     }
@@ -99,13 +100,18 @@ angular.module('appYiSou.controllers', [])
       });
     }).then(function(authData) {
       console.log("Logged in as: ", authData.uid);
-      $rootScope.g_auth = authData;
+      $rootScope.g_auth = authData;    
       $state.go('app.home.root');
+
+      var email = authData.password.email.replace(/\./g, ',');
+      $scope.fbUsers.child(email).set({
+        "userId": authData.uid
+      });
     }).catch(function(error) {
       if (error.code === "EMAIL_TAKEN") {
         $scope.alert = ">> The user name has been taken, please try another one";
       }
-      console.error("Error: ", error)
+      console.error("Error: ", error);
     });
 
   }
@@ -173,9 +179,14 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('ListsCtrl', function($scope, fbListings) {
-  $scope.fbListings = fbListings;
+.controller('ListsCtrl', function($scope, $state, fbListings, fbUsers) {
+  //$scope.fbListings = fbListings;
+  //var queryRef = fbListings.orderByKey().equalTo()
   
+  $scope.goBack = function() {
+    $state.go("app.home");
+    console.log("goBack to the Home view")    
+  }
 })
 
 .controller('FavoriatesCtrl', function($scope) {

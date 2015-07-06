@@ -179,13 +179,20 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
     }    
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/lists');
+  $urlRouterProvider.otherwise('/app/home/root');
 })
 
-.factory('fbListings', ['$firebaseArray', 
-  function($firebaseArray) {
+.factory('fbListings', [ 
+  function() {
     var ref = new Firebase("https://hosty.firebaseIO.com/lists");
-    return $firebaseArray(ref);
+    return ref;
+  }
+])
+
+.factory('fbUsers', [ 
+  function() {
+    var ref = new Firebase("https://hosty.firebaseIO.com/users");
+    return ref;
   }
 ])
 
