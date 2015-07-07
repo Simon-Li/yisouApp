@@ -179,9 +179,11 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('ListsCtrl', function($scope, $state, fbListings, fbUsers) {
+.controller('ListsCtrl', function($scope, $rootScope, $state, fbListings, fbUsers) {
   //$scope.fbListings = fbListings;
   //var queryRef = fbListings.orderByKey().equalTo()
+
+  fbUsers.child($rootScope.g_auth.password.email.replace(/\./g, ',')).on();
   
   $scope.goBack = function() {
     $state.go("app.home");
