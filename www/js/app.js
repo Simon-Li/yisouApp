@@ -182,10 +182,10 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
   $urlRouterProvider.otherwise('/app/home/root');
 })
 
-.factory('fbListings', [ 
-  function() {
+.factory('fbListings', [ '$firebaseArray',
+  function($firebaseArray) {
     var ref = new Firebase("https://hosty.firebaseIO.com/lists");
-    return ref;
+    return $firebaseArray(ref);
   }
 ])
 

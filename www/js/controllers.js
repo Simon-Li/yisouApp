@@ -1,12 +1,19 @@
 angular.module('appYiSou.controllers', [])
 
-.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth) {
+.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth, fbUsers, fbListings) {
   var ref = new Firebase("https://hosty.firebaseIO.com");
   $rootScope.authObj = $firebaseAuth(ref);
 
   $rootScope.g_auth = $rootScope.authObj.$getAuth();
   if ($rootScope.g_auth) {
     console.log("Logged in as:", $rootScope.g_auth.uid);
+/*    
+    fbUsers.child($rootScope.g_auth.password.email.replace(/\./g, ','))
+      .child("publishList")
+      .on('child_added', function(snapshot) {
+        console.log(snapshot.val());
+    });
+*/
   } else {
     console.log("User not logged in");
   }
@@ -169,9 +176,11 @@ angular.module('appYiSou.controllers', [])
       var key = ref.key();
       var rec = $scope.fbListings.$getRecord(key);
       rec.listId = key;
+      /*
       $scope.fbListings.$save(rec).then(function(ref) {
         ref.key() === rec.$id;
       });
+      */
       console.log("added record with fb_id: " + key + ", listId: " + rec.listId);
       $state.go("app.home.root");
     });
@@ -180,14 +189,10 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('ListsCtrl', function($scope, $rootScope, $state, fbListings, fbUsers) {
-  //$scope.fbListings = fbListings;
-  //var queryRef = fbListings.orderByKey().equalTo()
 
-  fbUsers.child($rootScope.g_auth.password.email.replace(/\./g, ',')).on();
-  
   $scope.goBack = function() {
     $state.go("app.home");
-    console.log("goBack to the Home view")    
+    console.log("goBack to the Home view");
   }
 })
 
