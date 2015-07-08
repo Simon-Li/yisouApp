@@ -1,19 +1,14 @@
 angular.module('appYiSou.controllers', [])
 
-.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth, fbUsers, fbListings) {
+.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth, authEventService, myListingService) {
   var ref = new Firebase("https://hosty.firebaseIO.com");
   $rootScope.authObj = $firebaseAuth(ref);
 
   $rootScope.g_auth = $rootScope.authObj.$getAuth();
   if ($rootScope.g_auth) {
     console.log("Logged in as:", $rootScope.g_auth.uid);
-/*    
-    fbUsers.child($rootScope.g_auth.password.email.replace(/\./g, ','))
-      .child("publishList")
-      .on('child_added', function(snapshot) {
-        console.log(snapshot.val());
-    });
-*/
+    authEventService.broadcast();
+    myListingService.start();
   } else {
     console.log("User not logged in");
   }
@@ -27,7 +22,7 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('LoginModalCtrl', function($scope, $rootScope, $state, $ionicSideMenuDelegate, loginModal) {
+.controller('LoginModalCtrl', function($scope, $rootScope, $state, $ionicSideMenuDelegate, loginModal, authEventService) {
   $scope.alert = '';
 
   // Triggered in the login modal to close it
@@ -47,11 +42,19 @@ angular.module('appYiSou.controllers', [])
       return;
     }
     loginModal.login(loginData).then(function(authData) {
-      console.log("Authenticated successfully with payload:", authData.uid);
+      console.log("Authenticated successfully, uid: "+authData.uid+", email: "+authData.password.email);
+
       $rootScope.g_auth = authData;
+
+      authEventService.broadcast();
       $scope.closeLogin();
       $ionicSideMenuDelegate.toggleLeft();
-      $state.go(loginModal.getToState().toState.name, loginModal.getToState().toParams);
+      if (loginModal.getToState().toState) {
+        $state.go(loginModal.getToState().toState.name, loginModal.getToState().toParams);
+      } else {
+        $state.go('app.home');
+        console.log('no previous router state, jump to app.home');
+      }
     }).catch(function(error) {
       $scope.alert = error;
       if (error.code === "INVALID_EMAIL") {
@@ -77,7 +80,7 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('SignupCtrl', function($scope, $rootScope, $state, fbUsers) {
+.controller('SignupCtrl', function($scope, $rootScope, $state, fbUsers, authEventService) {
   $scope.alert = '';
   $scope.fbUsers = fbUsers;
 
@@ -106,8 +109,9 @@ angular.module('appYiSou.controllers', [])
         password: userInfo.password
       });
     }).then(function(authData) {
-      console.log("Logged in as: ", authData.uid);
-      $rootScope.g_auth = authData;    
+      console.log("Logged in as: "+authData.uid+", email: "+authData.password.email);
+      $rootScope.g_auth = authData;
+      authEventService.broadcast();
       $state.go('app.home.root');
 
       var email = authData.password.email.replace(/\./g, ',');
@@ -169,26 +173,39 @@ angular.module('appYiSou.controllers', [])
         "price": spaceInfo.price, 
         "bedsNum": spaceInfo.beds,
         "bathsNum": spaceInfo.baths,
-        "photoUrl": ""
+        "photoUrl": "img/thehosty.ico.png"
       }      
     };
     $scope.fbListings.$add(elem).then(function(ref) {
+      /*
       var key = ref.key();
       var rec = $scope.fbListings.$getRecord(key);
       rec.listId = key;
-      /*
+      
       $scope.fbListings.$save(rec).then(function(ref) {
         ref.key() === rec.$id;
       });
       */
-      console.log("added record with fb_id: " + key + ", listId: " + rec.listId);
       $state.go("app.home.root");
+      console.log("added record at key: "+key.key());
     });
   }
 
 })
 
-.controller('ListsCtrl', function($scope, $rootScope, $state, fbListings, fbUsers) {
+.controller('ListsCtrl', function($scope, $rootScope, $state) {  
+  $scope.$on('$ionicView.enter', function() {
+/*    
+    var ref = new Firebase("https://hosty.firebaseIO.com/lists");
+    var ownerId = $rootScope.g_auth.password.email;
+    console.info("ListsCtrl callback: ownerId %s", ownerId);
+
+    ref.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
+        $scope.myListings = snap.val();
+    });
+*/
+    $scope.myListings = $rootScope.myListings;    
+  });
 
   $scope.goBack = function() {
     $state.go("app.home");

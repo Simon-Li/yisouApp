@@ -235,4 +235,39 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       };
     }
   }
-});
+})
+
+.service("authEventService", function($rootScope) {
+  this.broadcast = function() {
+    $rootScope.$broadcast("authEvent");
+    console.info("broadcast authEvent");
+  }
+  this.listen = function(cb) {
+    $rootScope.$on("authEvent", function(event, data) {
+      cb.call();
+    });
+    console.info("receive authEvent event");
+  }
+})
+
+.service("myListingService", function($rootScope, authEventService) {
+  return {
+    start: function() {
+      console.info("myListingService runs...")
+
+      var cb = function() {
+        var ref = new Firebase("https://hosty.firebaseIO.com/lists");
+        var ownerId = $rootScope.g_auth.password.email;
+        console.info("ListsCtrl callback, ownerId: "+ownerId);
+
+        ref.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
+            $rootScope.myListings = snap.val();
+        });    
+      }
+      
+      authEventService.listen(cb);     
+    }
+  }
+})
+
+;
