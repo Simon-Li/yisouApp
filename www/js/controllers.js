@@ -131,7 +131,7 @@ angular.module('appYiSou.controllers', [])
   
 })
 
-.controller('AccountCtrl', function($scope, $rootScope, loginModal) {
+.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $cordovaToast, loginModal) {
   $scope.openLoginModal = function() {
     loginModal.openModal();
   };
@@ -140,7 +140,21 @@ angular.module('appYiSou.controllers', [])
     $rootScope.authObj.$unauth();
     $rootScope.g_auth = null;
     console.log("Logged out!")
-  }  
+
+    $ionicPlatform.ready(function() {
+      $cordovaToast
+        .show('Here is a message', 'long', 'center')
+        .then(
+          function(success) {
+          // success
+          }, 
+          function (error) {
+          // error
+          }
+        );    
+    });
+  };
+
 })
 
 .controller('HomeRootCtrl', 
