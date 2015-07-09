@@ -2,10 +2,18 @@
   <ion-nav-bar class="bar-stable">
   </ion-nav-bar>
   <ion-content>
-    <ion-list>
-      <ion-item class="item-icon-left" menu-close href="#/app/profile"><i class="icon ion-ios-person-outline"></i>Profile</ion-item>
-      <ion-item class="item-icon-left" menu-close href="#/app/settings"><i class="icon ion-ios-gear-outline"></i>Settings</ion-item>     
-    </ion-list>
+    <div class="list">
+      <a class="item item-icon-left item-icon-right" href="#/app/profile" >
+        <i class="icon ion-ios-person-outline"></i>
+        Profile
+        <i class="icon ion-ios-arrow-right"></i>
+      </a>
+      <a class="item item-icon-left item-icon-right" href="#/app/settings" >
+        <i class="icon ion-ios-gear-outline"></i>
+        Settings
+        <i class="icon ion-ios-arrow-right"></i>
+      </a>     
+    </div>
     <div class="row">
       <button ng-show="!g_auth" class="button button-block button-positive" ng-click="openLoginModal()">Log in</button>
       <button ng-show="g_auth" class="button button-block button-positive" ng-click="logout()">Log out</button>

@@ -215,7 +215,9 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('ProfileCtrl', function($scope, $state) {
+.controller('ProfileCtrl', function($scope, $state, $rootScope) {
+  //$scope.email = $rootScope.g_auth.password.email;
+
   $scope.goBack = function() {
     $state.go("app.account");
     console.log("Back to the account view")
