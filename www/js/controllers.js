@@ -8,7 +8,6 @@ angular.module('appYiSou.controllers', [])
   if ($rootScope.g_auth) {
     console.log("Logged in as:", $rootScope.g_auth.uid);
     authEventService.broadcast();
-    myListingService.start();
   } else {
     console.log("User not logged in");
   }
@@ -187,7 +186,7 @@ angular.module('appYiSou.controllers', [])
       });
       */
       $state.go("app.home.root");
-      console.log("added record at key: "+key.key());
+      console.log("record added with key: "+ref.key());
     });
   }
 
@@ -195,16 +194,7 @@ angular.module('appYiSou.controllers', [])
 
 .controller('ListsCtrl', function($scope, $rootScope, $state) {  
   $scope.$on('$ionicView.enter', function() {
-/*    
-    var ref = new Firebase("https://hosty.firebaseIO.com/lists");
-    var ownerId = $rootScope.g_auth.password.email;
-    console.info("ListsCtrl callback: ownerId %s", ownerId);
-
-    ref.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
-        $scope.myListings = snap.val();
-    });
-*/
-    $scope.myListings = $rootScope.myListings;    
+    console.info("Enter Lists view")
   });
 
   $scope.goBack = function() {

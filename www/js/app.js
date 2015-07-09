@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
 
-.run(function($ionicPlatform, $rootScope, $state, $stateParams, loginModal) {
+.run(function($ionicPlatform, $rootScope, $state, $stateParams, loginModal, myListingService) {
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 
@@ -33,6 +33,8 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
       loginModal.saveToState(toState, toParams);
     }
   });
+
+  myListingService.start();
 
 })
 
@@ -246,19 +248,19 @@ angular.module('appYiSou', ['ionic', 'firebase', 'appYiSou.controllers'])
     $rootScope.$on("authEvent", function(event, data) {
       cb.call();
     });
-    console.info("receive authEvent event");
+    console.info("listen authEvent event");
   }
 })
 
 .service("myListingService", function($rootScope, authEventService) {
   return {
     start: function() {
-      console.info("myListingService runs...")
+      console.info("myListingService is up...")
 
       var cb = function() {
         var ref = new Firebase("https://hosty.firebaseIO.com/lists");
         var ownerId = $rootScope.g_auth.password.email;
-        console.info("ListsCtrl callback, ownerId: "+ownerId);
+        console.info("receive authEvent and fire callback, ownerId: "+ownerId);
 
         ref.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
             $rootScope.myListings = snap.val();
