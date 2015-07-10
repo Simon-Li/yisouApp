@@ -143,7 +143,7 @@ angular.module('appYiSou.controllers', [])
 
     $ionicPlatform.ready(function() {
       $cordovaToast
-        .show('Here is a message', 'long', 'center')
+        .show('You just logged out!', 'long', 'center')
         .then(
           function(success) {
           // success
