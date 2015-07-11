@@ -157,8 +157,18 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('HomeRootCtrl', 
-  function($scope) {
+.controller('HomeRootCtrl', function($scope, $cordovaGeolocation) {
+
+
+  var posOptions = {timeout: 10000, enableHighAccuracy: false};
+  $cordovaGeolocation
+    .getCurrentPosition(posOptions)
+    .then(function (position) {
+      $scope.cur_lat  = position.coords.latitude
+      $scope.cur_lon = position.coords.longitude
+    }, function(err) {
+      // error
+    });
 
 })
 
