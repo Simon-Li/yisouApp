@@ -158,7 +158,53 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('HomeRootCtrl', function($scope, $cordovaGeolocation) {
-  //$scope.myListings = {};
+  $scope.regionData = [
+    {
+      "name": "NorthWest",
+      "totalListing": "12",
+      "todayListing": "5",
+      "apatNum": "3",
+      "singleHouseNum": "5",
+      "shareHouseNum": "2",
+      "hotelNum": "24"
+    },
+    {
+      "name": "NorthEast",
+      "totalListing": "18",
+      "todayListing": "8",
+      "apatNum": "10",
+      "singleHouseNum": "6",
+      "shareHouseNum": "1",
+      "hotelNum": "32"
+    },
+    {
+      "name": "Downtown",
+      "totalListing": "8",
+      "todayListing": "2",
+      "apatNum": "7",
+      "singleHouseNum": "1",
+      "shareHouseNum": "2",
+      "hotelNum": "48"
+    },
+    {
+      "name": "SouthWest",
+      "totalListing": "32",
+      "todayListing": "10",
+      "apatNum": "12",
+      "singleHouseNum": "15",
+      "shareHouseNum": "3",
+      "hotelNum": "25"
+    },
+    {
+      "name": "SouthEast",
+      "totalListing": "32",
+      "todayListing": "11",
+      "apatNum": "12",
+      "singleHouseNum": "17",
+      "shareHouseNum": "4",
+      "hotelNum": "18"
+    }    
+  ];
 
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
   $cordovaGeolocation
@@ -173,9 +219,13 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('HomeAddCtrl', function($scope, $rootScope, $state, fbListings) {
-  $scope.presetBedsNum = ['1 bed', '2 beds', '3 beds', '4 beds'];
-  $scope.presetBathsNum = ['1 bath', '2 baths', '3 baths'];
+  $scope.spaceInfo = {};
+  $scope.presetBeds = ['1', '2', '3', '4'];
+  $scope.spaceInfo.beds = '1';
+  $scope.presetBaths = ['1', '2', '3'];
+  $scope.spaceInfo.baths = '1';
   $scope.presetCity = ['Calgary', 'Vancouver', 'Toronto', 'Montreal'];
+  $scope.spaceInfo.city = 'Calgary';
   $scope.fbListings = fbListings;
   
   $scope.goBack = function() {

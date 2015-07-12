@@ -1,41 +1,43 @@
 <ion-view view-title="theHosty">
 <ion-content>
+<!--
   <b>My location: [ {{cur_lat}}, {{cur_lon}} ]</b> <br>
   <b>My city: [ {{cur_city}} Calgary ]</b>
+-->  
   <ion-list>
-    <ion-item ng-repeat="area in myListings" style="padding-bottom: 1px;padding-top: 1px;padding-left: 0px;padding-right: 0px;">
-      <div class="row" style="padding-left: 0px;padding-right: 0px;">
+    <ion-item ng-repeat="area in regionData" style="padding-bottom: 1px;padding-top: 1px;padding-left: 0px;padding-right: 0px;">
+      <div class="row" style="padding-left: 0px;padding-right: 0px;padding-top: 1px;padding-bottom: 1px;">
         <div class="col col-25">
-          <p style="font-size: 14px;padding-top: 42px;padding-right: 0px;padding-bottom: 20px;padding-left: 0px;">{{area.name}} Downtown</p>
+          <p style="font-size: 14px;padding-top: 42px;padding-right: 0px;padding-bottom: 20px;padding-left: 0px;">{{area.name}}</p>
         </div>   
         <div class="col col-65" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
           <div class="row" style="padding-top: 0px;padding-bottom: 0px;line-height:14px;">
-            <div class="col col-50 text-center" style="font-size: 11px;min-height: 14px;">
-              <div class="list-item">{{area.totalListing}}12</div>
+            <div class="col col-50 text-center" style="font-size: 11px;">
+              <div class="list-item">{{area.totalListing}}</div>
               <div class="list-item">Total Listing</div>
             </div>
-            <div class="col col-50 text-center" style="font-size: 11px;min-height: 14px;">
-              <div class="list-item">{{area.todayListing}}12</div>
+            <div class="col col-50 text-center" style="font-size: 11px;">
+              <div class="list-item">{{area.todayListing}}</div>
               <div class="list-item">Today Listing</div>            
             </div>
           </div>
-          <div class="row" style="padding-top: 5px;padding-bottom: 0px;line-height:14px;">
-            <div class="col col-50 text-center" style="font-size: 11px;min-height: 14px;">
-              <div class="list-item">{{area.apatNum}}12</div>
+          <div class="row" style="padding-top: 3px;padding-bottom: 0px;line-height:14px;">
+            <div class="col col-50 text-center" style="font-size: 11px;">
+              <div class="list-item">{{area.apatNum}}</div>
               <div class="list-item">Apartment</div>
             </div>
-            <div class="col col-50 text-center" style="font-size: 11px;min-height: 14px;">
-              <div class="list-item">{{area.singleHouseNum}}12</div>
+            <div class="col col-50 text-center" style="font-size: 11px;">
+              <div class="list-item">{{area.singleHouseNum}}</div>
               <div class="list-item">Single House</div>            
             </div>
           </div>
-          <div class="row" style="padding-top: 5px;padding-bottom: 0px;line-height:14px;">
-            <div class="col col-50 text-center" style="font-size: 11px;min-height: 14px;">
-              <div class="list-item">{{area.shareHouseNum}}12</div>
+          <div class="row" style="padding-top: 3px;padding-bottom: 0px;line-height:14px;">
+            <div class="col col-50 text-center" style="font-size: 11px;">
+              <div class="list-item">{{area.shareHouseNum}}</div>
               <div class="list-item">Shared House</div>
             </div>
-            <div class="col col-50 text-center" style="font-size: 11px;min-height: 14px;">
-              <div class="list-item">{{area.hotelNum}}12</div>
+            <div class="col col-50 text-center" style="font-size: 11px;">
+              <div class="list-item">{{area.hotelNum}}</div>
               <div class="list-item">Hotels</div>            
             </div>
           </div>

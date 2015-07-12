@@ -13,18 +13,24 @@ select {
 
 <ion-content>
   <form ng-submit="add(spaceInfo)" >
-    <div class="row" style="line-height: 33px;">
-      <div class="col text-left item">Beds
-        <select ng-model="spaceInfo.beds" ng-options="item for item in presetBedsNum"></select>
+    <div class="row">
+      <div class="col item item-input item-select">
+        <div class="input-label">Beds</div>
+        <select ng-model="spaceInfo.beds" style="padding-top: 7px;padding-bottom: 7px;">
+          <option ng-repeat="v in presetBeds" value="{{v}}">{{v}}</option>
+        </select>       
       </div>
-      <div class="col text-left item">Baths
-        <select ng-model="spaceInfo.baths" ng-options="v for v in presetBathsNum"></select>
+      <div class="col item item-input item-select">
+        <div class="input-label">Baths</div>
+        <select ng-model="spaceInfo.baths" ng-options="v for v in presetBaths" style="padding-top: 7px;padding-bottom: 7px;"></select>
       </div>
     </div>
-    <div class="row" style="line-height: 33px;">
-      <div class="col text-left item">City
-        <select ng-model="spaceInfo.city" ng-options="v for v in presetCity"></select>
-      </div>    
+    <div class="row">
+      <div class="col item item-input item-select">
+        <div class="input-label">City</div>
+        <select ng-model="spaceInfo.city" ng-options="v for v in presetCity" style="padding-top: 7px;padding-bottom: 7px;"></select>
+      </div>
+    </div>    
     </div>
     <div class="row">
       <div class="col text-left item item-input">
