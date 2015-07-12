@@ -127,8 +127,17 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
-.controller('HomeCtrl', function($scope, $state) {
-  
+.controller('AddFriendModalCtrl', function($scope, addFriendModal) {
+
+  $scope.close = function() {
+    addFriendModal.closeModal();
+  }
+})
+
+.controller('HomeCtrl', function($scope, $state, addFriendModal) {
+  $scope.openAddFriendDialog = function() {
+    addFriendModal.openModal();
+  }
   $scope.navTitleClicked = function() {
     $state.go("app.lists");
   }
@@ -222,6 +231,7 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('HomeAddCtrl', function($scope, $rootScope, $state, fbListings) {
+  $scope.alert = '';
   $scope.spaceInfo = {};
   $scope.presetBeds = ['1', '2', '3', '4'];
   $scope.spaceInfo.beds = '1';
@@ -229,15 +239,27 @@ angular.module('appYiSou.controllers', [])
   $scope.spaceInfo.baths = '1';
   $scope.presetCity = ['Calgary', 'Vancouver', 'Toronto', 'Montreal'];
   $scope.spaceInfo.city = 'Calgary';
+  $scope.presetSpaceType = ['Apartment', 'Single House', 'Shared House', 'Hotel'];
+  $scope.spaceInfo.spaceType = 'Apartment';
+
   $scope.fbListings = fbListings;
-  
+ 
   $scope.goBack = function() {
     $state.go("app.home.root");
     console.log("goBack to the Home view")
   }
 
   $scope.add = function(spaceInfo) {
-    console.log("space listing length: %s", $scope.fbListings.length);
+    if (typeof spaceInfo.address === 'undefined' && typeof spaceInfo.postcode === 'undefined' ||
+        spaceInfo.address === "" && spaceInfo.postcode === "") {
+      $scope.alert = ">> Address or postcode information MUST input."
+      return
+    }
+    if (typeof spaceInfo.price === 'undefined') {
+      $scope.alert = ">> Price information is missing."
+      return
+    }
+
     var elem = {
       "listId": "",
       "ownerId": $rootScope.g_auth.password.email,
@@ -249,9 +271,11 @@ angular.module('appYiSou.controllers', [])
         "price": spaceInfo.price, 
         "bedsNum": spaceInfo.beds,
         "bathsNum": spaceInfo.baths,
+        "spaceType": spaceInfo.spaceType,
         "photoUrl": "img/thehosty.ico.png"
       }      
     };
+
     $scope.fbListings.$add(elem).then(function(ref) {
       /*
       var key = ref.key();
@@ -276,7 +300,7 @@ angular.module('appYiSou.controllers', [])
 
   $scope.goBack = function() {
     $state.go("app.home.root");
-    console.log("goBack to the Home view");
+    console.log("goBack to the home root view");
   }
 })
 
@@ -288,8 +312,14 @@ angular.module('appYiSou.controllers', [])
   
 })
 
-.controller('ListCtrl', function($scope, $stateParams) {
+.controller('ListCtrl', function($scope, $state, $stateParams) {
+  $scope.listId = $stateParams.listId;
+  console.info("enter into list view, listId: ", $scope.listId);
 
+  $scope.goBack = function() {
+    $state.go("app.lists");
+    console.log("Back to the lists view")
+  }
 })
 
 .controller('ProfileCtrl', function($scope, $state, $rootScope) {

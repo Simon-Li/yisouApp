@@ -15,12 +15,12 @@
 </style>
 <ion-view>
   <ion-nav-bar class="bar-stable">
-    <ion-nav-title ng-click="navTitleClicked()">myHosty</ion-nav-title>
+    <ion-nav-title ng-click="navTitleClicked()">theHosty</ion-nav-title>
     <ion-nav-buttons side="left">
       <a href="#/app/home/search" class="button button-icon icon ion-ios-search custom-icon"></a>   
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-      <a href="#/app/home/add" class="button button-icon icon ion-ios-plus-empty"></a>
+      <a ng-click="openAddFriendDialog()" class="button button-icon icon ion-ios-personadd-outline"></a>
     </ion-nav-buttons>
   </ion-nav-bar>
 

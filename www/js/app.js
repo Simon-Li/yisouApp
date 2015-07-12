@@ -145,7 +145,7 @@ angular.module('appYiSou', ['ionic', 'ngCordova', 'firebase', 'appYiSou.controll
     }    
   })
   .state('app.list', {
-    url: "/lists/:listId",
+    url: "/list/:listId",
     views: {
       'menuContent': {
         templateUrl: "templates/list.html",
@@ -198,6 +198,24 @@ angular.module('appYiSou', ['ionic', 'ngCordova', 'firebase', 'appYiSou.controll
   }
 ])
 
+.service('addFriendModal', function($ionicModal) {
+  var instance;
+
+  return {
+    openModal: function() {
+      $ionicModal.fromTemplateUrl('templates/addFriend.html')
+        .then(function(modal) {
+          instance = modal;
+          instance.show();
+        });      
+    },
+    closeModal: function() {
+      instance.remove();
+      console.log("dialog removed");
+    }
+  }
+})
+
 .service('loginModal', function($ionicModal, $rootScope, $q) {
   var instance, toState, toParams;
 
@@ -211,7 +229,7 @@ angular.module('appYiSou', ['ionic', 'ngCordova', 'firebase', 'appYiSou.controll
     },
     closeModal: function() {
       instance.remove();
-      console.log("dialog removed")
+      console.log("dialog removed");
     },
     login: function(loginData) {
       var deferred = $q.defer();
@@ -264,6 +282,13 @@ angular.module('appYiSou', ['ionic', 'ngCordova', 'firebase', 'appYiSou.controll
 
         ref.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
             $rootScope.myListings = snap.val();
+            
+            /*
+            console.log($rootScope.myListings);
+            _.forEach($rootScope.myListings, function(v, k) {
+              console.log(v, k);
+            })
+            */           
         });    
       }
       

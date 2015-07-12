@@ -27,11 +27,16 @@ select {
     </div>
     <div class="row">
       <div class="col item item-input item-select">
+        <div class="input-label">Space Type</div>
+        <select ng-model="spaceInfo.spaceType" ng-options="v for v in presetSpaceType" style="padding-top: 7px;padding-bottom: 7px;"></select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col item item-input item-select">
         <div class="input-label">City</div>
         <select ng-model="spaceInfo.city" ng-options="v for v in presetCity" style="padding-top: 7px;padding-bottom: 7px;"></select>
       </div>
     </div>    
-    </div>
     <div class="row">
       <div class="col text-left item item-input">
         <input type="text" placeholder="Address" ng-model="spaceInfo.address">
@@ -49,9 +54,9 @@ select {
     </div>
     <div class="row">
       <div ng-show="alert!==''">
-        <p style="color: red; size=0.8em;">{{alert}}</p>
+        <p style="color: red; size=0.8em;"><br>{{alert}}</p>
       </div>            
-    </div>
+    </div>    
     <div class="row">
       <button class="button button-block button-positive" type="submit">Add</button>             
     </div>

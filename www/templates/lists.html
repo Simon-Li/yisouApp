@@ -25,7 +25,7 @@
 
   <ion-content>
     <ion-list show-delete="false" show-reorder="false" can-swipe="true">
-      <ion-item ng-repeat="item in myListings" class="item-thumbnail-left">
+      <ion-item ng-repeat="(key, item) in myListings" class="item-thumbnail-left" ng-href="#/app/list/{{key}}">
         <img ng-src="{{item.spaceInfo.photoUrl}}" style="width: 75%; height: 80%">
         
         <div class="row" style=" padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
@@ -33,7 +33,7 @@
             <p style="font-size: 12px;" flex>{{ item.spaceInfo.address}}</p>
             <p style="font-size: 13px; color: red; font-weight: bold;" flex> ${{ item.spaceInfo.price }} </p>
             <p style="font-size: 12px;" flex> {{ item.spaceInfo.bedsNum+'-bed, '+item.spaceInfo.bathsNum+'-bath' }} </p>
-            <p style="font-size: 12px;" flex> {{ item.spaceInfo.type }} </p>
+            <p style="font-size: 12px;" flex> {{ item.spaceInfo.spaceType }} </p>
           </div>
           <div class="col col-15 text-right" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
             <ion-list>
