@@ -158,7 +158,7 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('HomeRootCtrl', function($scope, $cordovaGeolocation) {
-
+  //$scope.myListings = {};
 
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
   $cordovaGeolocation
