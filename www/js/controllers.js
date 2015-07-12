@@ -127,8 +127,11 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
-.controller('HomeCtrl', function($scope) {
+.controller('HomeCtrl', function($scope, $state) {
   
+  $scope.navTitleClicked = function() {
+    $state.go("app.lists");
+  }
 })
 
 .controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $cordovaToast, loginModal) {
@@ -259,7 +262,7 @@ angular.module('appYiSou.controllers', [])
         ref.key() === rec.$id;
       });
       */
-      $state.go("app.home.root");
+      $state.go("app.lists");
       console.log("record added with key: "+ref.key());
     });
   }
@@ -272,7 +275,7 @@ angular.module('appYiSou.controllers', [])
   });
 
   $scope.goBack = function() {
-    $state.go("app.home");
+    $state.go("app.home.root");
     console.log("goBack to the Home view");
   }
 })
