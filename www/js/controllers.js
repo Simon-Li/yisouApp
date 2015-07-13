@@ -299,8 +299,8 @@ angular.module('appYiSou.controllers', [])
   });
 
   $scope.goBack = function() {
-    $state.go("app.home.root");
-    console.log("goBack to the home root view");
+    $state.go("app.account");
+    console.log("goBack to the account view");
   }
 })
 
