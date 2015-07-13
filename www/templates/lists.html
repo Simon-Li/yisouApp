@@ -1,17 +1,14 @@
 <style>
-  .custom-icon {
-    font-size: 18px;
-  }
-  .custom-paw-icon {
-    font-size: 21px;
-  }  
-  .item-content {
+  .item .item-content {
     padding-bottom: 0px !important; 
     padding-right: 5px !important;  
-    padding-top: 6px !important;
+    padding-top: 7px !important;
   }
-
+  .item .item-content .custom-ion-item div:active {
+    background-color: transparent !important;
+  }
 }  
+
 </style>
 <ion-view view-title="My listing">
   <ion-nav-bar class="bar-stable">
@@ -36,20 +33,20 @@
             <p style="font-size: 12px;" flex> {{ item.spaceInfo.spaceType }} </p>
           </div>
           <div class="col col-15 text-right" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
-            <ion-list>
-              <ion-item style="border: none;font-size: 20px;min-height: 20px;padding-left: 0px;padding-top: 2px;padding-right: 8px;padding-bottom: 0px;">
+            <div class="list">
+              <div style="border: none;font-size: 20px;min-height: 20px;padding-left: 0px;padding-top: 2px;padding-right: 8px;padding-bottom: 0px;">
                 <a><i class="icon ion-ios-heart-outline" ></i></a>
-              </ion-item>
+              </div>
 <!--              
               <ion-item style="border: none;font-size: 22px;min-height: 22px;padding-left: 0px;padding-top: 10px;padding-right: 7px;padding-bottom: 0px;">
                 <a><i class="icon ion-ios-paw-outline" ></i></a>
               </ion-item>              
 -->              
-              <ion-item class="text-right" style="border: none;font-size: 11px;min-height: 12px;padding-left: 0px;padding-top: 40px;padding-right: 4px;padding-bottom: 0px;line-height:12px;">
+              <div class="text-right" style="border: none;font-size: 11px;min-height: 12px;padding-left: 0px;padding-top: 40px;padding-right: 4px;padding-bottom: 0px;line-height:12px;">
                   <div class="list-item" style="padding-right:8px;">{{"12"}}</div>
                   <div class="list-item">views</div>
-              </ion-item>
-            </ion-list>        
+              </div>
+            </div>        
           </div>
         </div>
 
