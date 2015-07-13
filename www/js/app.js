@@ -4,13 +4,16 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('appYiSou', ['ionic', 'ngCordova', 'firebase', 'appYiSou.controllers'])
+angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ngCordova', 'firebase', 'appYiSou.controllers'])
 
-.run(function($ionicPlatform, $rootScope, $state, $stateParams, loginModal, myListingService) {
+.run(function($ionicPlatform, $ionicAnalytics, $rootScope, $state, $stateParams, loginModal, myListingService) {
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 
   $ionicPlatform.ready(function() {
+
+    $ionicAnalytics.register();
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -38,7 +41,15 @@ angular.module('appYiSou', ['ionic', 'ngCordova', 'firebase', 'appYiSou.controll
 
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
+  // Identify app
+  $ionicAppProvider
+
+  .identify({
+    app_id: '7747818c',
+    api_key: 'f27df5c9c948b50b76cfa46a07f7eb3a837a68e9519885ba'
+  });
+
   $stateProvider
 
   .state('app', {

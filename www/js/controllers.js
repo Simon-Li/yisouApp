@@ -215,7 +215,16 @@ angular.module('appYiSou.controllers', [])
       "singleHouseNum": "17",
       "shareHouseNum": "4",
       "hotelNum": "18"
-    }    
+    },
+    {
+      "name": "All Calgary",
+      "totalListing": "32",
+      "todayListing": "11",
+      "apatNum": "12",
+      "singleHouseNum": "17",
+      "shareHouseNum": "4",
+      "hotelNum": "18"
+    }
   ];
 
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
