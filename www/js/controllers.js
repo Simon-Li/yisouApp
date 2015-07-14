@@ -254,8 +254,8 @@ angular.module('appYiSou.controllers', [])
   $scope.fbListings = fbListings;
  
   $scope.goBack = function() {
-    $state.go("app.home.root");
-    console.log("goBack to the Home view")
+    $state.go("app.lists");
+    console.log("back to lists view");
   }
 
   $scope.add = function(spaceInfo) {

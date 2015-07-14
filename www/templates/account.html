@@ -3,21 +3,29 @@
   </ion-nav-bar>
   <ion-content>
     <div class="list">
+      <div class="item item-divider">
+      </div>
       <a class="item item-icon-left item-icon-right" href="#/app/profile" >
         <i class="icon ion-ios-person-outline"></i>
         Profile
         <i class="icon ion-ios-arrow-right"></i>
       </a>
+      <div class="item item-divider">
+      </div>
       <a class="item item-icon-left item-icon-right" href="#/app/lists" >
         <i class="icon ion-ios-pricetags-outline"></i>
         My Listing
         <i class="icon ion-ios-arrow-right"></i>
       </a>      
+      <div class="item item-divider">
+      </div>
       <a class="item item-icon-left item-icon-right" href="#/app/settings" >
         <i class="icon ion-ios-gear-outline"></i>
         Settings
         <i class="icon ion-ios-arrow-right"></i>
       </a>     
+      <div class="item item-divider">
+      </div>
     </div>
     <div class="row">
       <button ng-show="!g_auth" class="button button-block button-positive" ng-click="openLoginModal()">Log in</button>
