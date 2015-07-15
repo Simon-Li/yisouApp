@@ -18,6 +18,9 @@
   <form ng-submit="doSignup(userInfo)">
     <div class="list list-inset">
       <label class="item item-input">
+        <input type="text" placeholder="Nick Name" ng-model="userInfo.nickName">
+      </label>    
+      <label class="item item-input">
         <input type="text" placeholder="Email" ng-model="userInfo.username">
       </label>
       <label class="item item-input">
