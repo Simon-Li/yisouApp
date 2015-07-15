@@ -300,7 +300,16 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
               console.log(v, k);
             })
             */           
-        });    
+        });
+
+        var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
+        var userId = $rootScope.g_auth.password.email.replace(/\./g, ',');
+        usersRef.orderByKey().equalTo(userId).on('value', function(snap) {
+          var userNameRef = snap.child(userId).child("name");
+          $rootScope.userName = userNameRef.val();
+          console.info('Account info: ', $rootScope.userName);
+        });
+
       }
       
       authEventService.listen(cb);     
