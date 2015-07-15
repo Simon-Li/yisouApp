@@ -1,6 +1,6 @@
 angular.module('appYiSou.controllers', [])
 
-.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth, authEventService, myListingService) {
+.controller('AppCtrl', function($scope, $rootScope, $firebaseAuth, authEventService) {
   var ref = new Firebase("https://hosty.firebaseIO.com");
   $rootScope.authObj = $firebaseAuth(ref);
 
@@ -156,6 +156,7 @@ angular.module('appYiSou.controllers', [])
   $scope.logout = function() {
     $rootScope.authObj.$unauth();
     $rootScope.g_auth = null;
+    $rootScope.myAccountInfo = {};
     console.log("Logged out!")
 
     $ionicPlatform.ready(function() {

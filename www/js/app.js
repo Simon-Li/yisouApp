@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ngCordova', 'firebase', 'appYiSou.controllers'])
 
-.run(function($ionicPlatform, $ionicAnalytics, $rootScope, $state, $stateParams, loginModal, myListingService) {
+.run(function($ionicPlatform, $ionicAnalytics, $rootScope, $state, $stateParams, loginModal, myAccountService) {
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 
@@ -37,7 +37,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
     }
   });
 
-  myListingService.start();
+  myAccountService.start();
 
 })
 
@@ -281,10 +281,13 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
   }
 })
 
-.service("myListingService", function($rootScope, authEventService) {
+.service("myAccountService", function($rootScope, authEventService) {
+
+  $rootScope.myAccountInfo = {};
+
   return {
     start: function() {
-      console.info("myListingService is up...")
+      console.info("myAccountService up...")
 
       var cb = function() {
         var ref = new Firebase("https://hosty.firebaseIO.com/lists");
@@ -306,8 +309,8 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
         var userId = $rootScope.g_auth.password.email.replace(/\./g, ',');
         usersRef.orderByKey().equalTo(userId).on('value', function(snap) {
           var userNameRef = snap.child(userId).child("name");
-          $rootScope.userName = userNameRef.val();
-          console.info('Account info: ', $rootScope.userName);
+          $rootScope.myAccountInfo.userName = userNameRef.val();
+          console.info('Account info: '+$rootScope.myAccountInfo.userName);
         });
 
       }
