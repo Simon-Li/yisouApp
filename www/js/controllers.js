@@ -85,10 +85,12 @@ angular.module('appYiSou.controllers', [])
 
   $scope.doSignup = function(userInfo) {
     console.info("%s, %s, %s", userInfo.username, userInfo.password, userInfo.confirmPassword)
+    /*
     if (typeof userInfo.nickName === 'undefined') {
       $scope.alert = ">> Please input your nick name";
       return;
-    }    
+    }
+    */
     if (userInfo.username.indexOf("@") === -1) {
       $scope.alert = ">> Your username is invalid email";
       return;
@@ -119,7 +121,7 @@ angular.module('appYiSou.controllers', [])
 
       var email = authData.password.email.replace(/\./g, ',');
       $scope.fbUsers.child(email).set({
-        "name": userInfo.nickName,
+        "name": "",
         "userId": authData.uid
       });
     }).catch(function(error) {
@@ -133,6 +135,9 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('AddFriendModalCtrl', function($scope, addFriendModal) {
+  $scope.searchFriend = function() {
+    
+  }
 
   $scope.close = function() {
     addFriendModal.closeModal();

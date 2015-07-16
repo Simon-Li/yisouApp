@@ -6,12 +6,13 @@
     </div>
   </ion-header-bar>
   <ion-content>
-
-  <div class="list list-inset">
-    <label class="item item-input">
-      <i class="icon ion-search placeholder-icon"></i>
-      <input type="text" placeholder="Hosty ID">
-    </label>
-  </div>
+    <form ng-submit="searchFriend()">
+      <div class="list list-inset">
+        <label class="item item-input">
+          <i class="icon ion-search placeholder-icon balanced"></i>
+          <input type="text" placeholder="Hosty ID" ng-model="userId">
+        </label>
+      </div>
+    </form>
   </ion-content>
 </ion-modal-view>
