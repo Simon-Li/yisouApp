@@ -6,13 +6,21 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="searchFriend()">
+    <form ng-submit="searchFriendById(searchUserId)">
       <div class="list list-inset">
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon balanced"></i>
-          <input type="text" placeholder="Hosty ID" ng-model="userId">
+          <input type="text" placeholder="Hosty ID" ng-model="searchUserId">
         </label>
       </div>
     </form>
+
+    <ion-list>
+      <ion-item ng-repeat="friend in myFriendSearchResult" class="item-thumbnail-left">
+        <img ng-src="{{item.spaceInfo.photoUrl}}" style="width: 75%; height: 80%">
+        <div class="col text-left">{{ myAccountInfo.userName }}</div>
+        <div class="col text-left" style="font-size: 11px;">Hosty ID: {{ g_auth.password.email }} </div>        
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-modal-view>

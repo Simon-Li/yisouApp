@@ -134,9 +134,13 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
-.controller('AddFriendModalCtrl', function($scope, addFriendModal) {
-  $scope.searchFriend = function() {
-    
+.controller('AddFriendModalCtrl', function($scope, addFriendModal, fbUsers) {
+  $scope.searchFriendById = function(searchUserId) {
+    var userId = searchUserId.replace(/\./g, ',');
+
+    fbUsers.orderByKey().equalTo(userId).once('value', function(snap) {
+
+    });
   }
 
   $scope.close = function() {
