@@ -121,8 +121,8 @@ angular.module('appYiSou.controllers', [])
 
       var email = authData.password.email.replace(/\./g, ',');
       $scope.fbUsers.child(email).set({
-        "name": "",
-        "userId": authData.uid
+        "name": "", 
+        "userId": authData.password.email
       });
     }).catch(function(error) {
       if (error.code === "EMAIL_TAKEN") {
@@ -135,11 +135,21 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('AddFriendModalCtrl', function($scope, addFriendModal, fbUsers) {
+  $scope.myFriendSearchResult = null;
+  $scope.alert = "";
+
   $scope.searchFriendById = function(searchUserId) {
-    var userId = searchUserId.replace(/\./g, ',');
+    console.info("search userId: "+searchUserId);
+    var search = searchUserId.replace(/\./g, ',');
 
-    fbUsers.orderByKey().equalTo(userId).once('value', function(snap) {
-
+    fbUsers.orderByKey().equalTo(search).once('value', function(snap) {
+      if (snap.exists()) {        
+        $scope.myFriendSearchResult = snap.val();
+        $scope.$digest();
+      } else {        
+        $scope.alert = "No results";
+        $scope.$digest();
+      }
     });
   }
 

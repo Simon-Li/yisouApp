@@ -15,12 +15,26 @@
       </div>
     </form>
 
-    <ion-list>
-      <ion-item ng-repeat="friend in myFriendSearchResult" class="item-thumbnail-left">
-        <img ng-src="{{item.spaceInfo.photoUrl}}" style="width: 75%; height: 80%">
-        <div class="col text-left">{{ myAccountInfo.userName }}</div>
-        <div class="col text-left" style="font-size: 11px;">Hosty ID: {{ g_auth.password.email }} </div>        
-      </ion-item>
-    </ion-list>
+    <div ng-if="myFriendSearchResult !== null">
+      <ion-list>
+        <div><br></div>
+        <ion-item ng-repeat="friend in myFriendSearchResult" class="item-thumbnail-left">
+          <img ng-src="img/thehosty.ico.png" style="width: 75%; height: 80%">
+          <div class="row">
+            <div class="col col-70">
+              <div class="col text-left">{{ friend.name }}</div>
+              <div class="col text-left" style="font-size: 11px;">Hosty ID: {{ friend.userId }} </div>
+            </div>
+            <div class="col col-25 text-center">
+              <button class="button icon ion-person-add"></button>
+            </div>
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div ng-if="myFriendSearchResult === null">
+      <br><br><br><br><br>
+      <p class="text-center">{{ alert }}</p>
+    </div>
   </ion-content>
 </ion-modal-view>
