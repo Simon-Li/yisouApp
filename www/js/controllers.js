@@ -21,7 +21,7 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('LoginModalCtrl', function($scope, $rootScope, $state, $ionicSideMenuDelegate, loginModal, authEventService) {
+.controller('LoginModalCtrl', function($scope, $rootScope, $state, loginModal, authEventService) {
   $scope.alert = '';
 
   // Triggered in the login modal to close it
@@ -47,12 +47,12 @@ angular.module('appYiSou.controllers', [])
 
       authEventService.broadcast();
       $scope.closeLogin();
-      $ionicSideMenuDelegate.toggleLeft();
+      
       if (loginModal.getToState().toState) {
         $state.go(loginModal.getToState().toState.name, loginModal.getToState().toParams);
       } else {
-        $state.go('app.home');
-        console.log('no previous router state, jump to app.home');
+        $state.go('app.home.root');
+        console.log('no previous router state, jump to app.home.root');
       }
     }).catch(function(error) {
       $scope.alert = error;
@@ -161,23 +161,24 @@ angular.module('appYiSou.controllers', [])
     });
   }
 
-  $scope.follow = function(userId) {
+  $scope.follow = function(userId, userName) {
     $scope.alert = null;
 
     console.info("follower id: "+userId);
 
-    var myId = $rootScope.g_auth.password.email;
+    var myId   = $rootScope.g_auth.password.email;
+    var myName = $rootScope.myAccountInfo.userName;
     var myConvertedId = myId.replace(/\./g, ',');
 
-    fbUsers.child(myConvertedId).child("follow").orderByChild("userId").equalTo(userId).once('value', function(snap) {
+    fbUsers.child(myConvertedId).child("following").orderByChild("userId").equalTo(userId).once('value', function(snap) {
       if (snap.exists() === true) {
-        $scope.alert = "You already followed this userId";
+        $scope.alert = "You already followed this user";
         //$scope.$digest();
       } else {
-        fbUsers.child(myConvertedId).child("follow").push({"userId": userId});
+        fbUsers.child(myConvertedId).child("following").push({"userId": userId, "name": userName});
 
         var followId = userId.replace(/\./g, ',');
-        fbUsers.child(followId).child("follower").push({"userId": myId});        
+        fbUsers.child(followId).child("follower").push({"userId": myId, "name": myName});
       }
     });
 
@@ -197,16 +198,14 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
-.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $cordovaToast, loginModal) {
+.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $cordovaToast, loginModal, myAccountService) {
   $scope.openLoginModal = function() {
     loginModal.openModal();
   };
 
   $scope.logout = function() {
-    $rootScope.authObj.$unauth();
-    $rootScope.g_auth = null;
-    $rootScope.myAccountInfo = {};
     console.log("Logged out!")
+    myAccountService.end();
 
     $ionicPlatform.ready(function() {
       $cordovaToast
@@ -310,7 +309,6 @@ angular.module('appYiSou.controllers', [])
  
   $scope.goBack = function() {
     $state.go("app.lists");
-    console.log("back to lists view");
   }
 
   $scope.add = function(spaceInfo) {
@@ -364,7 +362,6 @@ angular.module('appYiSou.controllers', [])
 
   $scope.goBack = function() {
     $state.go("app.account");
-    console.log("goBack to the account view");
   }
 })
 
@@ -376,7 +373,7 @@ angular.module('appYiSou.controllers', [])
   
 })
 
-.controller('FollowingCtrl', function($scope, $state, addFriendModal) {
+.controller('FollowingCtrl', function($scope, $state, fbUsers, addFriendModal) {
 
   $scope.openAddFriendDialog = function() {
     addFriendModal.openModal();
@@ -384,7 +381,6 @@ angular.module('appYiSou.controllers', [])
 
   $scope.goBack = function() {
     $state.go("app.account");
-    console.log("goBack to the account view");
   }
 })
 
@@ -396,7 +392,6 @@ angular.module('appYiSou.controllers', [])
 
   $scope.goBack = function() {
     $state.go("app.account");
-    console.log("goBack to the account view");
   }  
 })
 
@@ -406,7 +401,6 @@ angular.module('appYiSou.controllers', [])
 
   $scope.goBack = function() {
     $state.go("app.lists");
-    console.log("Back to the lists view")
   }
 })
 
@@ -415,14 +409,12 @@ angular.module('appYiSou.controllers', [])
 
   $scope.goBack = function() {
     $state.go("app.account");
-    console.log("Back to the account view")
   }
 })
 
 .controller('SettingsCtrl', function($scope, $state) {
   $scope.goBack = function() {
     $state.go("app.account");
-    console.log("Back to the account view")
   }
 });
 

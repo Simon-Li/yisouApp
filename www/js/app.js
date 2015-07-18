@@ -27,13 +27,13 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
 
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
     var requireLogin = toState.data.requireLogin;
+    console.log("toState: "+toState.name+", toParams: ", toParams);
+    loginModal.saveToState(toState, toParams);
 
     if (requireLogin && $rootScope.g_auth === null) {
       event.preventDefault();
       loginModal.openModal();
       console.log("login in dialog is opened!");
-      console.log("toState: %s, toParams: %s", toState.name, toParams.toString());
-      loginModal.saveToState(toState, toParams);
     }
   });
 
@@ -306,40 +306,51 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
 })
 
 .service("myAccountService", function($rootScope, authEventService) {
-
   $rootScope.myAccountInfo = {};
+  var digested = false;
+  var listsRef = new Firebase("https://hosty.firebaseIO.com/lists");
+  var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
 
   return {
     start: function() {
-      console.info("myAccountService up...")
+      console.info("myAccountService starts...")
 
       var cb = function() {
-        var ref = new Firebase("https://hosty.firebaseIO.com/lists");
         var ownerId = $rootScope.g_auth.password.email;
         console.info("receive authEvent and fire callback, ownerId: "+ownerId);
 
-        ref.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
-            $rootScope.myListings = snap.val();
-            
-            /*
-            console.log($rootScope.myListings);
-            _.forEach($rootScope.myListings, function(v, k) {
-              console.log(v, k);
-            })
-            */           
+        listsRef.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
+            $rootScope.myListings = snap.val();            
         });
 
-        var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
         var userId = $rootScope.g_auth.password.email.replace(/\./g, ',');
+        
         usersRef.orderByKey().equalTo(userId).on('value', function(snap) {
-          var userNameRef = snap.child(userId).child("name");
-          $rootScope.myAccountInfo.userName = userNameRef.val();
-          console.info('Account info: '+$rootScope.myAccountInfo.userName);
+          $rootScope.myAccountInfo.userName = snap.child(userId).child("name").val();
+          $rootScope.myAccountInfo.following = snap.child(userId).child("following").val();
+          $rootScope.myAccountInfo.follower = snap.child(userId).child("follower").val();
+
+          console.info('Account userName: '+$rootScope.myAccountInfo.userName);
+          console.log('Account following: '+$rootScope.myAccountInfo.following);
+          console.log('Account follower: '+$rootScope.myAccountInfo.follower);
+          if (digested === false) {
+            $rootScope.$digest();
+            digested = true;
+          }
         });
 
       }
       
-      authEventService.listen(cb);     
+      authEventService.listen(cb);
+    },
+
+    end: function() {
+      console.info("myAccountService ends, do cleanup...");
+      listsRef.off('value');
+      usersRef.off('value');
+      $rootScope.authObj.$unauth();
+      $rootScope.g_auth = null;
+      $rootScope.myAccountInfo = {};    
     }
   }
 })

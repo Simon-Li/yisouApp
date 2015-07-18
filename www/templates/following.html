@@ -9,6 +9,19 @@
   </ion-nav-bar>
 
   <ion-content>
-
+    <ion-list>
+      <ion-item ng-repeat="friend in myAccountInfo.following" class="item-thumbnail-left">
+        <img ng-src="img/thehosty.ico.png" style="width: 75%; height: 80%">
+        <div class="row">
+          <div class="col col-70">
+            <div class="col text-left">{{ friend.name }}</div>
+            <div class="col text-left" style="font-size: 11px;">Hosty ID: {{ friend.userId }} </div>
+          </div>
+          <div class="col col-25 text-center">
+            <button class="button icon ion-ios-checkmark-empty" ng-click="follow(friend.userId)"></button>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>
