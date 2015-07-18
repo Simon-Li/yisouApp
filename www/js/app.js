@@ -179,6 +179,30 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
       requireLogin: true
     }    
   })
+  .state('app.following', {
+    url: "/following",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/following.html",
+        controller: 'FollowingCtrl'
+      }
+    },
+    data: {
+      requireLogin: true
+    }    
+  })
+  .state('app.follower', {
+    url: "/follower",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/follower.html",
+        controller: 'FollowerCtrl'
+      }
+    },
+    data: {
+      requireLogin: true
+    }    
+  })  
   .state('app.settings', {
     url: "/settings",
     views: {

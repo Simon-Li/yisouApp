@@ -15,7 +15,7 @@
       </div>
     </form>
 
-    <div ng-if="myFriendSearchResult !== null">
+    <div ng-if="alert === null">
       <ion-list>
         <div><br></div>
         <ion-item ng-repeat="friend in myFriendSearchResult" class="item-thumbnail-left">
@@ -26,13 +26,13 @@
               <div class="col text-left" style="font-size: 11px;">Hosty ID: {{ friend.userId }} </div>
             </div>
             <div class="col col-25 text-center">
-              <button class="button icon ion-person-add"></button>
+              <button class="button icon ion-person-add" ng-click="follow(friend.userId)"></button>
             </div>
           </div>
         </ion-item>
       </ion-list>
     </div>
-    <div ng-if="myFriendSearchResult === null">
+    <div ng-if="alert !== null">
       <br><br><br><br><br>
       <p class="text-center">{{ alert }}</p>
     </div>

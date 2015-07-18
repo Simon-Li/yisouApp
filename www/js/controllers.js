@@ -134,12 +134,20 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
-.controller('AddFriendModalCtrl', function($scope, addFriendModal, fbUsers) {
-  $scope.myFriendSearchResult = null;
-  $scope.alert = "";
+.controller('AddFriendModalCtrl', function($scope, $rootScope, addFriendModal, fbUsers) {
+  //$scope.myFriendSearchResult = null;
+  $scope.alert = null;
 
   $scope.searchFriendById = function(searchUserId) {
+    $scope.alert = null;
+
     console.info("search userId: "+searchUserId);
+    var myId = $rootScope.g_auth.password.email;
+    if (searchUserId === myId) {
+      $scope.alert = "Inputed your own userId, igored.";
+      return
+    }
+
     var search = searchUserId.replace(/\./g, ',');
 
     fbUsers.orderByKey().equalTo(search).once('value', function(snap) {
@@ -151,6 +159,28 @@ angular.module('appYiSou.controllers', [])
         $scope.$digest();
       }
     });
+  }
+
+  $scope.follow = function(userId) {
+    $scope.alert = null;
+
+    console.info("follower id: "+userId);
+
+    var myId = $rootScope.g_auth.password.email;
+    var myConvertedId = myId.replace(/\./g, ',');
+
+    fbUsers.child(myConvertedId).child("follow").orderByChild("userId").equalTo(userId).once('value', function(snap) {
+      if (snap.exists() === true) {
+        $scope.alert = "You already followed this userId";
+        //$scope.$digest();
+      } else {
+        fbUsers.child(myConvertedId).child("follow").push({"userId": userId});
+
+        var followId = userId.replace(/\./g, ',');
+        fbUsers.child(followId).child("follower").push({"userId": myId});        
+      }
+    });
+
   }
 
   $scope.close = function() {
@@ -344,6 +374,30 @@ angular.module('appYiSou.controllers', [])
 
 .controller('MessagesCtrl', function($scope) {
   
+})
+
+.controller('FollowingCtrl', function($scope, $state, addFriendModal) {
+
+  $scope.openAddFriendDialog = function() {
+    addFriendModal.openModal();
+  }
+
+  $scope.goBack = function() {
+    $state.go("app.account");
+    console.log("goBack to the account view");
+  }
+})
+
+.controller('FollowerCtrl', function($scope, $state, addFriendModal) {
+
+  $scope.openAddFriendDialog = function() {
+    addFriendModal.openModal();
+  }
+
+  $scope.goBack = function() {
+    $state.go("app.account");
+    console.log("goBack to the account view");
+  }  
 })
 
 .controller('ListCtrl', function($scope, $state, $stateParams) {
