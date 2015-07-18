@@ -73,7 +73,6 @@ angular.module('appYiSou.controllers', [])
 
   $scope.enterSignup = function() {
     $scope.closeLogin();
-    $ionicSideMenuDelegate.toggleLeft();
     $state.go('app.signup');
   };
 
@@ -148,7 +147,7 @@ angular.module('appYiSou.controllers', [])
       return
     }
 
-    var search = searchUserId.replace(/\./g, ',');
+    var search = searchUserId.replace(/\./g, ',').toLowerCase();
 
     fbUsers.orderByKey().equalTo(search).once('value', function(snap) {
       if (snap.exists()) {        
@@ -163,6 +162,7 @@ angular.module('appYiSou.controllers', [])
 
   $scope.follow = function(userId, userName) {
     $scope.alert = null;
+    $scope.added = false;
 
     console.info("follower id: "+userId);
 
@@ -172,13 +172,14 @@ angular.module('appYiSou.controllers', [])
 
     fbUsers.child(myConvertedId).child("following").orderByChild("userId").equalTo(userId).once('value', function(snap) {
       if (snap.exists() === true) {
-        $scope.alert = "You already followed this user";
+        $scope.alert = "You already followed with this user";
         //$scope.$digest();
       } else {
         fbUsers.child(myConvertedId).child("following").push({"userId": userId, "name": userName});
 
         var followId = userId.replace(/\./g, ',');
         fbUsers.child(followId).child("follower").push({"userId": myId, "name": myName});
+        $scope.added = true;
       }
     });
 

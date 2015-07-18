@@ -18,15 +18,15 @@
     <div ng-if="alert === null">
       <ion-list>
         <div><br></div>
-        <ion-item ng-repeat="friend in myFriendSearchResult" class="item-thumbnail-left">
-          <img ng-src="img/thehosty.ico.png" style="width: 75%; height: 80%">
-          <div class="row">
-            <div class="col col-70">
-              <div class="col text-left">{{ friend.name }}</div>
-              <div class="col text-left" style="font-size: 11px;">Hosty ID: {{ friend.userId }} </div>
+        <ion-item ng-repeat="friend in myFriendSearchResult" class="item-thumbnail-left" style="padding-bottom: 0px;padding-top: 0px; min-height:50px;padding-left: 60px;">
+          <img ng-src="img/thehosty.ico.png" style="max-width: 48px;max-height: 38px;">
+          <div class="row" style="padding-top: 1px;padding-bottom: 1px;">
+            <div class="col col-85" style="padding-top: 2px;padding-bottom: 0px;">
+              <div class="col text-left" style="padding-bottom: 0px;">{{ friend.name }}</div>
+              <div class="col text-left" style="font-size: 11px;padding-top:0px;">Hosty ID: {{ friend.userId }} </div>
             </div>
-            <div class="col col-25 text-center">
-              <button class="button icon ion-person-add" ng-click="follow(friend.userId, friend.name)"></button>
+            <div class="col col-10">
+              <button class="button button-small icon ion-person-add" ng-class="{'balanced': added===true}" ng-click="follow(friend.userId, friend.name)"></button>
             </div>
           </div>
         </ion-item>
