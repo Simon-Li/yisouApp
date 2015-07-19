@@ -12,7 +12,7 @@
 </style>
 <ion-view view-title="Listing">
   <ion-nav-bar class="bar-stable">
-    <ion-nav-back-button class="button-clear" ng-click="goBack()">
+    <ion-nav-back-button class="button-clear">
       <i class="ion-ios-arrow-back"></i>
     </ion-nav-back-button>    
     <ion-nav-buttons side="right">
@@ -22,7 +22,7 @@
 
   <ion-content>
     <ion-list show-delete="false" show-reorder="false" can-swipe="true">
-      <ion-item ng-repeat="(key, item) in myListings" class="item-thumbnail-left" ng-href="#/app/list/{{key}}/{{myAccountInfo.userId}}">
+      <ion-item ng-repeat="(key, item) in listing" class="item-thumbnail-left" ng-href="#/app/list/{{key}}/{{myAccountInfo.userId}}">
         <img ng-src="{{item.spaceInfo.photoUrl}}" style="width: 75%; height: 80%">
         
         <div class="row" style=" padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
@@ -57,6 +57,11 @@
         
       </ion-item>
     </ion-list>
+
+    <div ng-if="listing === null">
+      <br><br><br><br><br>
+      <p class="text-center">No listings yet</p>
+    </div>
   </ion-content>
 </ion-view>
 

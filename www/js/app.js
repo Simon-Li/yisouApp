@@ -314,8 +314,9 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
   return {
     getListingByUserId: function(userId) {
       var deferred = $q.defer();
-      listsRef.orderByChild("ownerId").equalTo(myUserId).once('value', function(snap) {
-          deferred.resolve(snap.val());
+      listsRef.orderByChild("ownerId").equalTo(userId).once('value', function(snap) {
+        console.log('getListingByUserId resolved: '+angular.toJson(snap.val()));
+        deferred.resolve(snap.val());
       });
       return deferred.promise;
     },
@@ -327,7 +328,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
         console.info("receive authEvent and fire callback, ownerId: "+myUserId);
 
         listsRef.orderByChild("ownerId").equalTo(myUserId).on('value', function(snap) {
-            $rootScope.myListing = snap.val();            
+            $rootScope.myAccountInfo.myListing = snap.val();            
         });
 
         var userId = $rootScope.g_auth.password.email.replace(/\./g, ',');

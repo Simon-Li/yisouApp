@@ -390,26 +390,25 @@ angular.module('appYiSou.controllers', [])
   }  
 })
 
-.controller('ListsCtrl', function($scope, $rootScope, $state, $stateParams) {
+.controller('ListsCtrl', function($scope, $rootScope, $state, $stateParams, myAccountService) {
   $scope.$on('$ionicView.enter', function() {
-    $scope.listsUserId = $stateParams.userId;
-    console.info('Enter Lists view, userId: '+$scope.listsUserId)
     
   });
 
-  $scope.goBack = function() {
-    $state.go("app.account");
+  console.info('Enter Lists view, userId: '+$stateParams.userId);
+
+  if ($stateParams.userId === $rootScope.myAccountInfo.userId) {
+    $scope.listing = $rootScope.myAccountInfo.myListing;
+  } else {
+    myAccountService.getListingByUserId($stateParams.userId)
+      .then(function(result) {
+        $scope.listing = result;
+      });
   }
 })
 
 .controller('ListCtrl', function($scope, $state, $stateParams) {
-  $scope.listId = $stateParams.listId;
-  $scope.userId = $stateParams.userId;
-  console.info("enter into list view, listId: "+$scope.listId+', userId: '+$scope.userId);
-
-  $scope.goBack = function() {
-    $state.go("app.lists", {userId: $scope.userId});
-  }
+  console.info("enter into list view, listId: "+$stateParams.listId+', userId: '+$stateParams.userId);
 })
 
 .controller('ProfileCtrl', function($scope, $state, $rootScope) {
