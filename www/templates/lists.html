@@ -22,7 +22,7 @@
 
   <ion-content>
     <ion-list show-delete="false" show-reorder="false" can-swipe="true">
-      <ion-item ng-repeat="(key, item) in myListings" class="item-thumbnail-left" ng-href="#/app/list/{{key}}">
+      <ion-item ng-repeat="(key, item) in myListings" class="item-thumbnail-left" ng-href="#/app/list/{{key}}/{{myAccountInfo.userId}}">
         <img ng-src="{{item.spaceInfo.photoUrl}}" style="width: 75%; height: 80%">
         
         <div class="row" style=" padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">

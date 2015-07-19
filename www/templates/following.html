@@ -10,7 +10,7 @@
 
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="friend in myAccountInfo.following" class="item-thumbnail-left" style="padding-bottom: 0px;padding-top: 0px; min-height:50px;padding-left: 60px;">
+      <ion-item ng-repeat="friend in myAccountInfo.following" class="item-thumbnail-left" style="padding-bottom: 0px;padding-top: 0px; min-height:50px !important;padding-left: 60px;" ng-click="viewFollowingLists(friend.userId)">
         <img ng-src="img/thehosty.ico.png" style="max-width: 48px;max-height: 38px;">
         <div class="row" style="padding-top: 1px;padding-bottom: 1px;">
           <div class="col col-85" style="padding-top: 2px;padding-bottom: 0px;">

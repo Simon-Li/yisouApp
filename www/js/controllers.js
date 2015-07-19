@@ -190,12 +190,12 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
-.controller('HomeCtrl', function($scope, $state, addFriendModal) {
+.controller('HomeCtrl', function($scope, $rootScope, $state, addFriendModal) {
   $scope.openAddFriendDialog = function() {
     addFriendModal.openModal();
   }
   $scope.navTitleClicked = function() {
-    $state.go("app.lists");
+    $state.go("app.lists", {userId: $rootScope.myAccountInfo.userId});
   }
 })
 
@@ -309,7 +309,7 @@ angular.module('appYiSou.controllers', [])
   $scope.fbListings = fbListings;
  
   $scope.goBack = function() {
-    $state.go("app.lists");
+    $state.go("app.lists", {userId: $rootScope.myAccountInfo.userId});
   }
 
   $scope.add = function(spaceInfo) {
@@ -349,21 +349,11 @@ angular.module('appYiSou.controllers', [])
         ref.key() === rec.$id;
       });
       */
-      $state.go("app.lists");
+      $state.go("app.lists", {userId: $rootScope.myAccountInfo.userId});
       console.log("record added with key: "+ref.key());
     });
   }
 
-})
-
-.controller('ListsCtrl', function($scope, $rootScope, $state) {  
-  $scope.$on('$ionicView.enter', function() {
-    console.info("Enter Lists view")
-  });
-
-  $scope.goBack = function() {
-    $state.go("app.account");
-  }
 })
 
 .controller('FavoriatesCtrl', function($scope) {
@@ -378,6 +368,10 @@ angular.module('appYiSou.controllers', [])
 
   $scope.openAddFriendDialog = function() {
     addFriendModal.openModal();
+  }
+
+  $scope.viewFollowingLists = function(userId) {
+    $state.go("app.lists", {userId: userId});
   }
 
   $scope.goBack = function() {
@@ -396,12 +390,25 @@ angular.module('appYiSou.controllers', [])
   }  
 })
 
-.controller('ListCtrl', function($scope, $state, $stateParams) {
-  $scope.listId = $stateParams.listId;
-  console.info("enter into list view, listId: ", $scope.listId);
+.controller('ListsCtrl', function($scope, $rootScope, $state, $stateParams) {
+  $scope.$on('$ionicView.enter', function() {
+    $scope.listsUserId = $stateParams.userId;
+    console.info('Enter Lists view, userId: '+$scope.listsUserId)
+    
+  });
 
   $scope.goBack = function() {
-    $state.go("app.lists");
+    $state.go("app.account");
+  }
+})
+
+.controller('ListCtrl', function($scope, $state, $stateParams) {
+  $scope.listId = $stateParams.listId;
+  $scope.userId = $stateParams.userId;
+  console.info("enter into list view, listId: "+$scope.listId+', userId: '+$scope.userId);
+
+  $scope.goBack = function() {
+    $state.go("app.lists", {userId: $scope.userId});
   }
 })
 

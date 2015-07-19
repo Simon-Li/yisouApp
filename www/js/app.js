@@ -27,7 +27,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
 
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
     var requireLogin = toState.data.requireLogin;
-    console.log("toState: "+toState.name+", toParams: ", toParams);
+    console.log('toState: '+toState.name+', toParams: '+angular.toJson(toParams));
     loginModal.saveToState(toState, toParams);
 
     if (requireLogin && $rootScope.g_auth === null) {
@@ -120,7 +120,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
     }    
   }) 
   .state('app.lists', {
-    url: "/lists",
+    url: "/lists/:userId",
     views: {
       'menuContent': {
         templateUrl: "templates/lists.html",
@@ -156,7 +156,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
     }    
   })
   .state('app.list', {
-    url: "/list/:listId",
+    url: "/list/:listId/:userId",
     views: {
       'menuContent': {
         templateUrl: "templates/list.html",
@@ -316,16 +316,19 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
       console.info("myAccountService starts...")
 
       var cb = function() {
+        /*
         var ownerId = $rootScope.g_auth.password.email;
         console.info("receive authEvent and fire callback, ownerId: "+ownerId);
 
         listsRef.orderByChild("ownerId").equalTo(ownerId).on('value', function(snap) {
             $rootScope.myListings = snap.val();            
         });
+        */
 
         var userId = $rootScope.g_auth.password.email.replace(/\./g, ',');
         
         usersRef.orderByKey().equalTo(userId).on('value', function(snap) {
+          $rootScope.myAccountInfo.userId = $rootScope.g_auth.password.email;
           $rootScope.myAccountInfo.userName = snap.child(userId).child("name").val();
           $rootScope.myAccountInfo.following = snap.child(userId).child("following").val();
           $rootScope.myAccountInfo.follower = snap.child(userId).child("follower").val();
