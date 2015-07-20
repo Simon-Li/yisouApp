@@ -34,17 +34,13 @@
           </div>
           <div class="col col-15 text-right" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
             <div class="list">
-              <div style="border: none;font-size: 20px;min-height: 20px;padding-left: 0px;padding-top: 2px;padding-right: 8px;padding-bottom: 0px;" ng-click="toggleFavor(key, item.ownerId)">
-                <a><i class="icon ion-ios-heart-outline" ></i></a>
+              <div style="border: none;font-size: 28px;min-height: 30px;padding-left: 0px;padding-top: 2px;padding-right: 6px;padding-bottom: 0px;" ng-click="toggleFavor(key, item.ownerId, $event)">
+                <a ng-if="checkFavor(key)"><i class="icon ion-ios-heart" style="color: purple;"></i></a>
+                <a ng-if="!checkFavor(key)"><i class="icon ion-ios-heart-outline"></i></a>
               </div>
-<!--              
-              <ion-item style="border: none;font-size: 22px;min-height: 22px;padding-left: 0px;padding-top: 10px;padding-right: 7px;padding-bottom: 0px;">
-                <a><i class="icon ion-ios-paw-outline" ></i></a>
-              </ion-item>              
--->              
               <div class="text-right" style="border: none;font-size: 11px;min-height: 12px;padding-left: 0px;padding-top: 40px;padding-right: 4px;padding-bottom: 0px;line-height:12px;">
-                  <div class="list-item" style="padding-right:8px;">{{"12"}}</div>
-                  <div class="list-item">views</div>
+                <div class="list-item" style="padding-right:8px;">{{"12"}}</div>
+                <div class="list-item">views</div>
               </div>
             </div>        
           </div>

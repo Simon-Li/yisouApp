@@ -389,7 +389,8 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
       usersRef.off('value');
       $rootScope.authObj.$unauth();
       $rootScope.g_auth = null;
-      $rootScope.myAccountInfo = {};    
+      $rootScope.myAccountInfo = {};
+      $rootScope.myAccountInfo.fullFavorListing = [];
     }
   }
 })

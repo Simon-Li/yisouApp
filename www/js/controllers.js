@@ -356,7 +356,18 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('FavoriatesCtrl', function($scope) {
+.controller('FavoriatesCtrl', function($scope, $rootScope, $state, myAccountService) {
+  $scope.checkFavor = function(listId) {
+    return _.has($rootScope.myAccountInfo.favor, listId)
+  }
+  $scope.toggleFavor = function(listId, ownerId) {
+    myAccountService.unsetFavor(listId);
+    console.log('unfavor listId: '+listId+', ownerId: '+ownerId);    
+  }
+  $scope.chat = function(item) {
+
+    $state.go();
+  }
 
 })
 
@@ -409,7 +420,10 @@ angular.module('appYiSou.controllers', [])
     return _.has($rootScope.myAccountInfo.favor, listId)
   }
 
-  $scope.toggleFavor = function(listId, ownerId) {
+  $scope.checkFavor = checkFavorExist;
+
+  $scope.toggleFavor = function(listId, ownerId, $event) {
+    event.preventDefault();
     console.log('listId: '+listId);
 
     if (checkFavorExist(listId) === true) {
