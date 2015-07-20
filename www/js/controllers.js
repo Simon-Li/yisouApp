@@ -357,7 +357,7 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('FavoriatesCtrl', function($scope) {
-  
+
 })
 
 .controller('MessagesCtrl', function($scope) {
@@ -391,24 +391,42 @@ angular.module('appYiSou.controllers', [])
 })
 
 .controller('ListsCtrl', function($scope, $rootScope, $state, $stateParams, myAccountService) {
-  $scope.$on('$ionicView.enter', function() {
+  $scope.$on('$ionicView.beforeEnter', function() {
+    console.info('Enter Lists view, userId: '+$stateParams.userId);
+
+    if ($stateParams.userId === $rootScope.myAccountInfo.userId) {
+      $scope.listing = $rootScope.myAccountInfo.myListing;
+    } else {
+      myAccountService.getListingByUserId($stateParams.userId)
+        .then(function(result) {
+          $scope.listing = result;
+        });
+    }
     
   });
 
-  console.info('Enter Lists view, userId: '+$stateParams.userId);
-
-  if ($stateParams.userId === $rootScope.myAccountInfo.userId) {
-    $scope.listing = $rootScope.myAccountInfo.myListing;
-  } else {
-    myAccountService.getListingByUserId($stateParams.userId)
-      .then(function(result) {
-        $scope.listing = result;
-      });
+  var checkFavorExist = function(listId) {
+    return _.has($rootScope.myAccountInfo.favor, listId)
   }
+
+  $scope.toggleFavor = function(listId, ownerId) {
+    console.log('listId: '+listId);
+
+    if (checkFavorExist(listId) === true) {
+      // do unfavor
+      myAccountService.unsetFavor(listId);
+      console.log('unfavor listId: '+listId+', ownerId: '+ownerId);
+    } else {
+      // do favor
+      myAccountService.setFavor(listId, ownerId);
+      console.log('favor listId: '+listId+', ownerId: '+ownerId);
+    }
+  }
+
 })
 
 .controller('ListCtrl', function($scope, $state, $stateParams) {
-  console.info("enter into list view, listId: "+$stateParams.listId+', userId: '+$stateParams.userId);
+  console.info("enter into list view, listId: "+$stateParams.listId+', ownerId: '+$stateParams.userId);
 })
 
 .controller('ProfileCtrl', function($scope, $state, $rootScope) {

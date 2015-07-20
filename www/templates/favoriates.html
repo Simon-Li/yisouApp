@@ -1,8 +1,55 @@
+<style>
+  .item .item-content {
+    padding-bottom: 0px !important; 
+    padding-right: 5px !important;  
+    padding-top: 7px !important;
+  }
+  .item .item-content .custom-ion-item div:active {
+    background-color: transparent !important;
+  }
+}  
+</style>
+
 <ion-view view-title="Favoriates">
   <ion-nav-bar class="bar-stable">
   </ion-nav-bar>
   <ion-content>
-    <b>Enter into favoriates page</b>
+    <ion-list show-delete="false" show-reorder="false" can-swipe="true">
+      <ion-item ng-repeat="item in myAccountInfo.fullFavorListing" class="item-thumbnail-left" ng-href="#/app/list/{{item.listId}}/{{item.details.ownerId}}">
+        <img ng-src="{{item.details.spaceInfo.photoUrl}}" style="width: 75%; height: 80%">
+        
+        <div class="row" style=" padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
+          <div class="col col-80 text-left" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
+            <p style="font-size: 12px;" flex>{{ item.details.spaceInfo.address}}</p>
+            <p style="font-size: 13px; color: red; font-weight: bold;" flex> ${{ item.details.spaceInfo.price }} </p>
+            <p style="font-size: 12px;" flex> {{ item.details.spaceInfo.bedsNum+'-bed, '+item.details.spaceInfo.bathsNum+'-bath' }} </p>
+            <p style="font-size: 12px;" flex> {{ item.details.spaceInfo.spaceType }} </p>
+          </div>
+          <div class="col col-15 text-right" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
+            <div class="list">
+              <div style="border: none;font-size: 20px;min-height: 20px;padding-left: 0px;padding-top: 2px;padding-right: 8px;padding-bottom: 0px;" ng-click="toggleFavor(key, item.ownerId)">
+                <a><i class="icon ion-ios-heart-outline" ></i></a>
+              </div>
+<!--              
+              <ion-item style="border: none;font-size: 22px;min-height: 22px;padding-left: 0px;padding-top: 10px;padding-right: 7px;padding-bottom: 0px;">
+                <a><i class="icon ion-ios-paw-outline" ></i></a>
+              </ion-item>              
+-->              
+              <div class="text-right" style="border: none;font-size: 11px;min-height: 12px;padding-left: 0px;padding-top: 40px;padding-right: 4px;padding-bottom: 0px;line-height:12px;">
+                  <div class="list-item" style="padding-right:8px;">{{"12"}}</div>
+                  <div class="list-item">views</div>
+              </div>
+            </div>        
+          </div>
+        </div>
+
+        <ion-option-button class="button-positive" style="width: 80px;" ng-click="share(item)">Share</ion-option-button>
+        <ion-option-button class="button-calm" style="width: 60px;" ng-click="edit(item)">Edit</ion-option-button>
+        <ion-delete-button class="ion-minus-circled" ng-click="items.splice($index, 1)"></ion-delete-button>
+        <ion-reorder-button class="ion-navicon" on-reorder="reorderItem(item, $fromIndex, $toIndex)"></ion-reorder-button>                  
+        
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>
 

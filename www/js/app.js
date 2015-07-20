@@ -307,11 +307,20 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
 
 .service("myAccountService", function($rootScope, $q, authEventService) {
   $rootScope.myAccountInfo = {};
+  $rootScope.myAccountInfo.fullFavorListing = [];
   var digested = false;
   var listsRef = new Firebase("https://hosty.firebaseIO.com/lists");
   var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
 
   return {
+    setFavor: function(listId, ownerId) {
+      var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
+      usersRef.child(myId).child("favor").child(listId).set(ownerId);
+    },
+    unsetFavor: function(listId) {
+      var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
+      usersRef.child(myId).child("favor").child(listId).remove();
+    },
     getListingByUserId: function(userId) {
       var deferred = $q.defer();
       listsRef.orderByChild("ownerId").equalTo(userId).once('value', function(snap) {
@@ -338,14 +347,35 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
           $rootScope.myAccountInfo.userName = snap.child(userId).child("name").val();
           $rootScope.myAccountInfo.following = snap.child(userId).child("following").val();
           $rootScope.myAccountInfo.follower = snap.child(userId).child("follower").val();
+          $rootScope.myAccountInfo.favor = snap.child(userId).child("favor").val();
 
-          console.info('Account userName: '+$rootScope.myAccountInfo.userName);
-          console.log('Account following: '+$rootScope.myAccountInfo.following);
-          console.log('Account follower: '+$rootScope.myAccountInfo.follower);
+          console.log('Account userName: '+$rootScope.myAccountInfo.userName);
+          console.log('my following: '+$rootScope.myAccountInfo.following);
+          console.log('my follower: '+$rootScope.myAccountInfo.follower);
+          console.log('my favor: '+$rootScope.myAccountInfo.favor);
+
           if (digested === false) {
             $rootScope.$digest();
             digested = true;
           }
+        });
+
+        usersRef.child(userId).child("favor").on('child_added', function(snap) {
+          var listId = snap.key();
+
+          listsRef.child(listId).once('value', function(childSnap) {
+            console.log(angular.toJson(childSnap.val()));
+            $rootScope.myAccountInfo.fullFavorListing.push({listId: listId, details: childSnap.val()});
+          });
+        });
+
+        usersRef.child(userId).child("favor").on('child_removed', function(snap) {
+          var listId = snap.key();
+
+          _.remove($rootScope.myAccountInfo.fullFavorListing, function(elem) {
+            return elem.listId === listId;
+          });
+
         });
 
       }

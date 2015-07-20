@@ -8,8 +8,8 @@
     background-color: transparent !important;
   }
 }  
-
 </style>
+
 <ion-view view-title="Listing">
   <ion-nav-bar class="bar-stable">
     <ion-nav-back-button class="button-clear">
@@ -22,7 +22,7 @@
 
   <ion-content>
     <ion-list show-delete="false" show-reorder="false" can-swipe="true">
-      <ion-item ng-repeat="(key, item) in listing" class="item-thumbnail-left" ng-href="#/app/list/{{key}}/{{myAccountInfo.userId}}">
+      <ion-item ng-repeat="(key, item) in listing" class="item-thumbnail-left" ng-href="#/app/list/{{key}}/{{item.ownerId}}">
         <img ng-src="{{item.spaceInfo.photoUrl}}" style="width: 75%; height: 80%">
         
         <div class="row" style=" padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;">
@@ -34,7 +34,7 @@
           </div>
           <div class="col col-15 text-right" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
             <div class="list">
-              <div style="border: none;font-size: 20px;min-height: 20px;padding-left: 0px;padding-top: 2px;padding-right: 8px;padding-bottom: 0px;">
+              <div style="border: none;font-size: 20px;min-height: 20px;padding-left: 0px;padding-top: 2px;padding-right: 8px;padding-bottom: 0px;" ng-click="toggleFavor(key, item.ownerId)">
                 <a><i class="icon ion-ios-heart-outline" ></i></a>
               </div>
 <!--              
@@ -60,7 +60,7 @@
 
     <div ng-if="listing === null">
       <br><br><br><br><br>
-      <p class="text-center">No listings yet</p>
+      <p class="text-center">No listing yet</p>
     </div>
   </ion-content>
 </ion-view>
