@@ -199,14 +199,14 @@ angular.module('appYiSou.controllers', [])
   }
 })
 
-.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $cordovaToast, loginModal, myAccountService) {
+.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $cordovaToast, loginModal, AccountService) {
   $scope.openLoginModal = function() {
     loginModal.openModal();
   };
 
   $scope.logout = function() {
     console.log("Logged out!")
-    myAccountService.end();
+    AccountService.end();
 
     $ionicPlatform.ready(function() {
       $cordovaToast
@@ -356,12 +356,12 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('FavoriatesCtrl', function($scope, $rootScope, $state, myAccountService) {
+.controller('FavoriatesCtrl', function($scope, $rootScope, $state, $ionicListDelegate, AccountService) {
   $scope.checkFavor = function(listId) {
     return _.has($rootScope.myAccountInfo.favor, listId)
   }
   $scope.toggleFavor = function(listId, ownerId) {
-    myAccountService.unsetFavor(listId);
+    AccountService.unsetFavor(listId);
     console.log('unfavor listId: '+listId+', ownerId: '+ownerId);    
   }
   $scope.chat = function(item) {
@@ -369,7 +369,8 @@ angular.module('appYiSou.controllers', [])
     var ownerId = item.details.ownerId;
 
     console.log('Chat for listId: '+listId+', ownerId: '+ownerId);
-    //$state.go();
+    $state.go("app.chat", {userId: ownerId, listId: listId});
+    $ionicListDelegate.closeOptionButtons();
   }
 
 })
@@ -378,7 +379,54 @@ angular.module('appYiSou.controllers', [])
   
 })
 
-.controller('ChatCtrl', function($scope) {
+.controller('ChatCtrl', function($scope, $rootScope, $state, $stateParams, $timeout, $ionicScrollDelegate, MsgService) {
+  $scope.messages = [];
+  $scope.data = {};
+  $scope.myId = '12345';
+  $scope.peerId = $stateParams.userId;
+
+
+  $scope.hideTime = true;
+  var alternate, isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+    $rootScope.enterIntoChat = true;
+  });
+  $scope.$on('$ionicView.beforeLeave', function() {
+    $rootScope.enterIntoChat = false;
+  });
+
+  $scope.sendMessage = function() {
+    alternate = !alternate;
+    var d = new Date();
+    d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+
+    var msg = {};
+    msg.body = {};
+    msg.recvId = $stateParams.userId;
+    msg.body.type = 'text';
+    msg.body.time = d;
+    msg.body.content = $scope.data.message;
+    //console.log('msg: '+angular.toJson(msg));
+    MsgService.sndMsg(msg);
+
+    delete $scope.data.message;
+    $ionicScrollDelegate.scrollBottom(true);
+  };
+  $scope.inputUp = function() {
+    if (isIOS) $scope.data.keyboardHeight = 216;
+    $timeout(function() {
+      $ionicScrollDelegate.scrollBottom(true);
+    }, 300);
+
+  };
+  $scope.inputDown = function() {
+    if (isIOS) $scope.data.keyboardHeight = 0;
+    $ionicScrollDelegate.resize();
+  };
+  $scope.closeKeyboard = function() {
+    // cordova.plugins.Keyboard.close();
+  };
   
 })
 
@@ -408,14 +456,14 @@ angular.module('appYiSou.controllers', [])
   }  
 })
 
-.controller('ListsCtrl', function($scope, $rootScope, $state, $stateParams, myAccountService) {
+.controller('ListsCtrl', function($scope, $rootScope, $state, $stateParams, AccountService) {
   $scope.$on('$ionicView.beforeEnter', function() {
     console.info('Enter Lists view, userId: '+$stateParams.userId);
 
     if ($stateParams.userId === $rootScope.myAccountInfo.userId) {
       $scope.listing = $rootScope.myAccountInfo.myListing;
     } else {
-      myAccountService.getListingByUserId($stateParams.userId)
+      AccountService.getListingByUserId($stateParams.userId)
         .then(function(result) {
           $scope.listing = result;
         });
@@ -435,11 +483,11 @@ angular.module('appYiSou.controllers', [])
 
     if (checkFavorExist(listId) === true) {
       // do unfavor
-      myAccountService.unsetFavor(listId);
+      AccountService.unsetFavor(listId);
       console.log('unfavor listId: '+listId+', ownerId: '+ownerId);
     } else {
       // do favor
-      myAccountService.setFavor(listId, ownerId);
+      AccountService.setFavor(listId, ownerId);
       console.log('favor listId: '+listId+', ownerId: '+ownerId);
     }
   }

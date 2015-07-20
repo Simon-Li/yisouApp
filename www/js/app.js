@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analytics', 'ngCordova', 'firebase', 'appYiSou.controllers'])
 
-.run(function($ionicPlatform, $ionicAnalytics, $rootScope, $state, $stateParams, loginModal, myAccountService) {
+.run(function($ionicPlatform, $ionicAnalytics, $rootScope, $state, $stateParams, loginModal, AccountService) {
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 
@@ -37,8 +37,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
     }
   });
 
-  myAccountService.start();
-
+  AccountService.start();
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
@@ -156,6 +155,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
     }    
   })
   .state('app.chat', {
+    cache: false,
     url: "/chat/:userId/:listId",
     views: {
       'menuContent': {
@@ -317,9 +317,10 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
   }
 })
 
-.service("myAccountService", function($rootScope, $q, authEventService) {
+.service("AccountService", function($rootScope, $q, authEventService, MsgService) {
   $rootScope.myAccountInfo = {};
   $rootScope.myAccountInfo.fullFavorListing = [];
+  $rootScope.myAccountInfo.messages = []; 
   var digested = false;
   var listsRef = new Firebase("https://hosty.firebaseIO.com/lists");
   var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
@@ -342,34 +343,33 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
       return deferred.promise;
     },
     start: function() {
-      console.info("myAccountService starts...")
+      console.info("AccountService starts...")
 
       var cb = function() {
-        var myUserId = $rootScope.g_auth.password.email;
-        console.info("receive authEvent and fire callback, ownerId: "+myUserId);
+        $rootScope.myAccountInfo.userId = $rootScope.g_auth.password.email;
+        console.info("receive authEvent and fire callback, ownerId: "+$rootScope.myAccountInfo.userId);
 
-        listsRef.orderByChild("ownerId").equalTo(myUserId).on('value', function(snap) {
+        listsRef.orderByChild("ownerId").equalTo($rootScope.myAccountInfo.userId).on('value', function(snap) {
             $rootScope.myAccountInfo.myListing = snap.val();            
         });
 
         var userId = $rootScope.g_auth.password.email.replace(/\./g, ',');
         
-        usersRef.orderByKey().equalTo(userId).on('value', function(snap) {
-          $rootScope.myAccountInfo.userId = $rootScope.g_auth.password.email;
-          $rootScope.myAccountInfo.userName = snap.child(userId).child("name").val();
-          $rootScope.myAccountInfo.following = snap.child(userId).child("following").val();
-          $rootScope.myAccountInfo.follower = snap.child(userId).child("follower").val();
-          $rootScope.myAccountInfo.favor = snap.child(userId).child("favor").val();
-
+        usersRef.child(userId).child("name").on('value', function(snap) {
+          $rootScope.myAccountInfo.userName = snap.val();
           console.log('Account userName: '+$rootScope.myAccountInfo.userName);
+        });
+        usersRef.child(userId).child("following").on('value', function(snap) {
+          $rootScope.myAccountInfo.following = snap.val();
           console.log('my following: '+$rootScope.myAccountInfo.following);
+        });
+        usersRef.child(userId).child("follower").on('value', function(snap) {
+          $rootScope.myAccountInfo.follower = snap.val();
           console.log('my follower: '+$rootScope.myAccountInfo.follower);
+        });
+        usersRef.child(userId).child("favor").on('value', function(snap) {
+          $rootScope.myAccountInfo.favor = snap.val();
           console.log('my favor: '+$rootScope.myAccountInfo.favor);
-
-          if (digested === false) {
-            $rootScope.$digest();
-            digested = true;
-          }
         });
 
         usersRef.child(userId).child("favor").on('child_added', function(snap) {
@@ -390,21 +390,100 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
 
         });
 
+        MsgService.start();
       }
       
       authEventService.listen(cb);
     },
 
     end: function() {
-      console.info("myAccountService ends, do cleanup...");
+      console.info("AccountService ends, do cleanup...");
       listsRef.off('value');
       usersRef.off('value');
       $rootScope.authObj.$unauth();
       $rootScope.g_auth = null;
       $rootScope.myAccountInfo = {};
       $rootScope.myAccountInfo.fullFavorListing = [];
+      $rootScope.myAccountInfo.messages = [];
     }
   }
 })
+
+.service("MsgService", function($rootScope, $q) {
+  var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
+
+  return {
+    start: function() {
+      var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
+      console.log('MsgService starts ... '+$rootScope.myAccountInfo.userId);
+
+      usersRef.child(myId)
+        .child("sendMsg")
+        .on('value', function(snap) {
+          $rootScope.$apply(function() {
+            _.forEach(snap.val(), function(v, k) {
+              console.log(v, k);
+              $rootScope.myAccountInfo.messages.push({peerUserId: snap.key().replace(/\,/g, '.'), msg: v});
+            });
+          });
+
+        });
+
+      usersRef.child(myId)
+        .child("recvMsg")
+        .on('child_added', function(snap) {
+          $rootScope.myAccountInfo.messages.push({peerUserId: snap.key().replace(/\,/g, '.'), msg: snap.val()});
+          var t = {peerUserId: snap.key().replace(/\,/g, '.'), msg: snap.val()};
+          console.log('recvMsg: '+t);
+        });
+    },
+    sndMsg: function(msg) {
+      var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
+      var recvId = msg.recvId.replace(/\./g, ',');
+      usersRef.child(myId).child("sendMsg").child(recvId).push(msg.body);
+      usersRef.child(recvId).child("recvMsg").child(myId).push(msg.body);
+    }
+  }
+})
+
+.directive('input', function($timeout) {
+  return {
+    restrict: 'E',
+    scope: {
+      'returnClose': '=',
+      'onReturn': '&',
+      'onFocus': '&',
+      'onBlur': '&'
+    },
+    link: function(scope, element, attr) {
+      element.bind('focus', function(e) {
+        if (scope.onFocus) {
+          $timeout(function() {
+            scope.onFocus();
+          });
+        }
+      });
+      element.bind('blur', function(e) {
+        if (scope.onBlur) {
+          $timeout(function() {
+            scope.onBlur();
+          });
+        }
+      });
+      element.bind('keydown', function(e) {
+        if (e.which == 13) {
+          if (scope.returnClose) element[0].blur();
+          if (scope.onReturn) {
+            $timeout(function() {
+              scope.onReturn();
+            });
+          }
+        }
+      });
+    }
+  }
+})
+
+
 
 ;
