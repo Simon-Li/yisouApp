@@ -143,12 +143,24 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
       requireLogin: true
     }    
   })
-  .state('app.messages', {
-    url: "/messages",
+  .state('app.chats', {
+    url: "/chats",
     views: {
       'menuContent': {
-        templateUrl: "templates/messages.html",
-        controller: 'MessagesCtrl'
+        templateUrl: "templates/chat.list.html",
+        controller: 'ChatsCtrl'
+      }
+    },
+    data: {
+      requireLogin: true
+    }    
+  })
+  .state('app.chat', {
+    url: "/chat/:userId/:listId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/chat.html",
+        controller: 'ChatCtrl'
       }
     },
     data: {

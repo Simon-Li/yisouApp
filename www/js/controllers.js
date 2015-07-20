@@ -365,13 +365,20 @@ angular.module('appYiSou.controllers', [])
     console.log('unfavor listId: '+listId+', ownerId: '+ownerId);    
   }
   $scope.chat = function(item) {
+    var listId = item.listId;
+    var ownerId = item.details.ownerId;
 
-    $state.go();
+    console.log('Chat for listId: '+listId+', ownerId: '+ownerId);
+    //$state.go();
   }
 
 })
 
-.controller('MessagesCtrl', function($scope) {
+.controller('ChatsCtrl', function($scope) {
+  
+})
+
+.controller('ChatCtrl', function($scope) {
   
 })
 
