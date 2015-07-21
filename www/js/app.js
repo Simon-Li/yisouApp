@@ -40,7 +40,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
   AccountService.start();
 })
 
-.config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicAppProvider, $ionicConfigProvider) {
   // Identify app
   $ionicAppProvider
 
@@ -48,6 +48,8 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
     app_id: '7747818c',
     api_key: 'f27df5c9c948b50b76cfa46a07f7eb3a837a68e9519885ba'
   });
+
+  $ionicConfigProvider.views.swipeBackEnabled(false);
 
   $stateProvider
 
