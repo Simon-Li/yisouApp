@@ -406,40 +406,80 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
   }
 })
 
-.service("MsgService", function($rootScope, $ionicScrollDelegate) {
+.service("MsgService", function($rootScope, $ionicScrollDelegate, $q, $timeout) {
   var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
 
   return {
-    register: function(peerUserId) {
+    sessionStart: function(peerUserId) {
       $rootScope.myAccountInfo.currChat = []; 
       var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
       var peerId = peerUserId.replace(/\./g, ',');
 
+      var deferred = $q.defer();
       usersRef.child(myId)
         .child("sendMsg")
         .child(peerId)
-        .on('child_added', function(snap) {          
-          $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "out", body: snap.val()});
-          //$rootScope.$digest();
+        .once('value', function(snap) {
+          var chats = [];
+          _.forEach(snap.val(), function(v, k) {
+            console.log('init load sendMsg: ', k);
+            chats.push({key: k, peerId: peerUserId, type: "out", media: v.media, time: v.time, content: v.content});
+            //console.log({key: k, peerId: peerUserId, type: "out", media: v.media, time: v.time, content: v.content});
+          });
+          deferred.resolve(chats);
         });
-      usersRef.child(myId)
-        .child("recvMsg")
-        .child(peerId)
-        .on('child_added', function(snap) {        
-          $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "in", body: snap.val()});
-          $ionicScrollDelegate.scrollBottom(true);
-          $rootScope.$digest();
-        });
+
+      var deferred1 = $q.defer();
+      deferred.promise.then(function(chats) {
+        usersRef.child(myId)
+          .child("recvMsg")
+          .child(peerId)
+          .once('value', function(snap) {
+            _.forEach(snap.val(), function(v, k) {
+              console.log('initial load recvMsg: ', k);
+              chats.push({key: k, peerId: peerUserId, type: "in", media: v.media, time: v.time, content: v.content});
+            });
+            //$rootScope.myAccountInfo.currChat = _.sortBy(chats, 'time');
+            deferred1.resolve(_.sortBy(chats, 'time'));
+            //console.log(angular.toJson($rootScope.myAccountInfo.currChat));
+          });
+      })
+      deferred1.promise.then(function(init_load_data) {
+        $rootScope.myAccountInfo.currChat = init_load_data;
+        usersRef.child(myId)
+          .child("recvMsg")
+          .child(peerId)
+          .on('child_added', function(snap) {
+            console.log('message received--1: ', snap.key());
+            if (_.find(init_load_data, 'key', snap.key()) === undefined) {
+              $timeout(function() {
+                var msg = {peerId: peerUserId, type: "in", media: snap.val().media, time: snap.val().time, content: snap.val().content};
+                $rootScope.myAccountInfo.currChat.push(msg);
+                $ionicScrollDelegate.scrollBottom(true);
+                console.log('message received: '+angular.toJson(msg));
+              }, 0);
+            } else {
+              console.log("duplicated message: "+snap.key());
+            }
+          });
+      });    
+
     },
-    deregister: function() {
+    sessionEnd: function(peerUserId) {
       $rootScope.myAccountInfo.currChat = [];
-      usersRef.off('child_added');
+      var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
+      var peerId = peerUserId.replace(/\./g, ',');      
+      usersRef.child(myId).child("recvMsg").child(peerId).off('child_added');
     },
     sndMsg: function(msg) {
       var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
       var recvId = msg.recvId.replace(/\./g, ',');
-      usersRef.child(myId).child("sendMsg").child(recvId).push(msg.body);
-      usersRef.child(recvId).child("recvMsg").child(myId).push(msg.body);
+      usersRef.child(myId).child("sendMsg").child(recvId).push(msg);
+      usersRef.child(recvId).child("recvMsg").child(myId).push(msg);
+
+      var msg = {peerId: msg.recvId, type: "out", media: msg.media, time: msg.time, content: msg.content};
+      $rootScope.myAccountInfo.currChat.push(msg);
+      console.log('message sent: '+angular.toJson(msg));
     }
   }
 })

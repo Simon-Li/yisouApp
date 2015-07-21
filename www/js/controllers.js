@@ -389,24 +389,24 @@ angular.module('appYiSou.controllers', [])
 
   $scope.$on('$ionicView.beforeEnter', function() {
     $rootScope.enterIntoChat = true;
-    MsgService.register($scope.peerId);
+    MsgService.sessionStart($scope.peerId);
   });
   $scope.$on('$ionicView.beforeLeave', function() {
     $rootScope.enterIntoChat = false;
-    MsgService.deregister();
+    MsgService.sessionEnd($scope.peerId);
   });
 
   $scope.sendMessage = function() {
     alternate = !alternate;
+    /*
     var d = new Date();
     d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
-
+    */
     var msg = {};
-    msg.body = {};
     msg.recvId = $stateParams.userId;
-    msg.body.type = 'text';
-    msg.body.time = d;
-    msg.body.content = $scope.data.message;
+    msg.media = 'text';
+    msg.time = Firebase.ServerValue.TIMESTAMP;
+    msg.content = $scope.data.message;
     //console.log('msg: '+angular.toJson(msg));
     MsgService.sndMsg(msg);
 
