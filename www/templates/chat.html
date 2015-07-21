@@ -94,11 +94,11 @@
   </ion-nav-bar>
 
   <ion-content class="content-stable" on-swipe-left="hideTime = false" on-swipe-right="hideTime = true">
-    <div ng-repeat="message in myAccountInfo.messages" ng-class="{other: message.peerUserId != myAccountInfo.userId}" class="messages">
+    <div ng-repeat="message in myAccountInfo.currChat" ng-class="{other: message.type === 'out'}" class="messages">
       <div class="message" ng-class="{'slide-right': hideTime, '': !hideTime}">
-        <span class="custom_span">{{ message.msg.content }}</span>
+        <span class="custom_span">{{message.body.content}}</span>
       </div>
-      <div class="time" ng-class="{'slide-right': hideTime, '': !hideTime}">{{message.msg.time}}</div>
+      <div class="time" ng-class="{'slide-right': hideTime, '': !hideTime}">{{message.body.time}}</div>
     </div>
   </ion-content>
 

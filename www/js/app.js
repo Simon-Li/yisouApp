@@ -320,7 +320,6 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
 .service("AccountService", function($rootScope, $q, authEventService, MsgService) {
   $rootScope.myAccountInfo = {};
   $rootScope.myAccountInfo.fullFavorListing = [];
-  $rootScope.myAccountInfo.messages = []; 
   var digested = false;
   var listsRef = new Firebase("https://hosty.firebaseIO.com/lists");
   var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
@@ -389,8 +388,6 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
           });
 
         });
-
-        MsgService.start();
       }
       
       authEventService.listen(cb);
@@ -413,29 +410,32 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
   var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
 
   return {
-    start: function() {
+    register: function(peerUserId) {
+      $rootScope.myAccountInfo.currChat = []; 
       var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
-      console.log('MsgService starts ... '+$rootScope.myAccountInfo.userId);
+      var peerId = peerUserId.replace(/\./g, ',');
 
       usersRef.child(myId)
         .child("sendMsg")
-        .on('value', function(snap) {
+        .child(peerId)
+        .on('child_added', function(snap) {
           $rootScope.$apply(function() {
-            _.forEach(snap.val(), function(v, k) {
-              console.log(v, k);
-              $rootScope.myAccountInfo.messages.push({peerUserId: snap.key().replace(/\,/g, '.'), msg: v});
-            });
+            $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "out", body: snap.val()});
           });
-
         });
-
       usersRef.child(myId)
         .child("recvMsg")
+        .child(peerId)
         .on('child_added', function(snap) {
-          $rootScope.myAccountInfo.messages.push({peerUserId: snap.key().replace(/\,/g, '.'), msg: snap.val()});
-          var t = {peerUserId: snap.key().replace(/\,/g, '.'), msg: snap.val()};
-          console.log('recvMsg: '+t);
+          $rootScope.$apply(function() {
+            $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "in", body: snap.val()});
+          });
         });
+
+    },
+    deregister: function() {
+      $rootScope.myAccountInfo.currChat = [];
+      usersRef.off('child_added');
     },
     sndMsg: function(msg) {
       var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');

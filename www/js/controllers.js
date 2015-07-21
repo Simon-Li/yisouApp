@@ -391,9 +391,13 @@ angular.module('appYiSou.controllers', [])
 
   $scope.$on('$ionicView.beforeEnter', function() {
     $rootScope.enterIntoChat = true;
+    MsgService.register($scope.peerId);
   });
   $scope.$on('$ionicView.beforeLeave', function() {
     $rootScope.enterIntoChat = false;
+    MsgService.deregister();
+
+    
   });
 
   $scope.sendMessage = function() {
