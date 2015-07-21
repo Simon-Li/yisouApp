@@ -368,7 +368,7 @@ angular.module('appYiSou.controllers', [])
     var listId = item.listId;
     var ownerId = item.details.ownerId;
 
-    console.log('Chat for listId: '+listId+', ownerId: '+ownerId);
+    console.log('start chat for listId: '+listId+', ownerId: '+ownerId);
     $state.go("app.chat", {userId: ownerId, listId: listId});
     $ionicListDelegate.closeOptionButtons();
   }
@@ -382,9 +382,7 @@ angular.module('appYiSou.controllers', [])
 .controller('ChatCtrl', function($scope, $rootScope, $state, $stateParams, $timeout, $ionicScrollDelegate, MsgService) {
   $scope.messages = [];
   $scope.data = {};
-  $scope.myId = '12345';
   $scope.peerId = $stateParams.userId;
-
 
   $scope.hideTime = true;
   var alternate, isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
@@ -396,8 +394,6 @@ angular.module('appYiSou.controllers', [])
   $scope.$on('$ionicView.beforeLeave', function() {
     $rootScope.enterIntoChat = false;
     MsgService.deregister();
-
-    
   });
 
   $scope.sendMessage = function() {
@@ -442,6 +438,16 @@ angular.module('appYiSou.controllers', [])
 
   $scope.viewFollowingLists = function(userId) {
     $state.go("app.lists", {userId: userId});
+  }
+
+  $scope.chat = function(userId, $event) {
+    console.log('start chat with ownerId: '+userId);
+    $state.go("app.chat", {userId: userId, listId: "null"});
+
+    if ($event.stopPropagation) $event.stopPropagation();
+    if ($event.preventDefault) $event.preventDefault();
+    $event.cancelBubble = true;
+    $event.returnValue = false;
   }
 
   $scope.goBack = function() {

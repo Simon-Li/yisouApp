@@ -406,7 +406,7 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
   }
 })
 
-.service("MsgService", function($rootScope, $q) {
+.service("MsgService", function($rootScope, $ionicScrollDelegate) {
   var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
 
   return {
@@ -418,20 +418,18 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
       usersRef.child(myId)
         .child("sendMsg")
         .child(peerId)
-        .on('child_added', function(snap) {
-          $rootScope.$apply(function() {
-            $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "out", body: snap.val()});
-          });
+        .on('child_added', function(snap) {          
+          $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "out", body: snap.val()});
+          //$rootScope.$digest();
         });
       usersRef.child(myId)
         .child("recvMsg")
         .child(peerId)
-        .on('child_added', function(snap) {
-          $rootScope.$apply(function() {
-            $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "in", body: snap.val()});
-          });
+        .on('child_added', function(snap) {        
+          $rootScope.myAccountInfo.currChat.push({peerId: peerUserId, type: "in", body: snap.val()});
+          $ionicScrollDelegate.scrollBottom(true);
+          $rootScope.$digest();
         });
-
     },
     deregister: function() {
       $rootScope.myAccountInfo.currChat = [];
