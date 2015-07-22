@@ -1,2 +1,23 @@
-
+<ion-view view-title="Chats">
+  <ion-nav-bar class="bar-stable">
+  </ion-nav-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="friend in myAccountInfo.following" class="item-thumbnail-left" style="padding-bottom: 0px;padding-top: 0px; min-height:50px !important;padding-left: 60px;" ng-click="viewFollowingLists(friend.userId)">
+        <img ng-src="img/thehosty.ico.png" style="max-width: 48px;max-height: 38px;">
+        <div class="row" style="padding-top: 1px;padding-bottom: 1px;">
+          <div class="col col-85" style="padding-top: 2px;padding-bottom: 0px;">
+            <div class="col text-left" style="padding-bottom: 0px;">{{ friend.name }}</div>
+            <div class="col text-left" style="font-size: 11px;padding-top:0px;">Hosty ID: {{ friend.userId }} </div>
+          </div>
+<!--          
+          <div class="col col-10">
+            <button class="button button-small icon ion-ios-chatbubble" ng-click="chat(friend.userId, $event)"></button>
+          </div>
+-->          
+        </div>
+      </ion-item>
+    </ion-list>  
+  </ion-content>
+</ion-view>
 
