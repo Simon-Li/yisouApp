@@ -390,6 +390,9 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
           });
 
         });
+
+
+        MsgService.getChatsList();
       }
       
       authEventService.listen(cb);
@@ -410,8 +413,32 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
 
 .service("MsgService", function($rootScope, $ionicScrollDelegate, $q, $timeout) {
   var usersRef = new Firebase("https://hosty.firebaseIO.com/users");
-
+  
   return {
+    getChatsList: function() {
+      $rootScope.chatsList = [];
+      var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
+      usersRef.child(myId)
+        .child("sendMsg")
+        .on('child_added', function(snap) {
+          var sendId = snap.key().replace(/\,/g, '.');
+          var lastMsgTime = "";
+          if(_.find($rootScope.chatsList, 'sendId', sendId) === undefined) {
+            // new peer, added into the chats list
+            var sendName = usersRef.child(myId).child("name").val();
+            var chatsListItem = {sendId: sendId, sendName: sendName, lastMsgTime: lastMsgTime};
+            $rootScope.chatsList.push(chatsListItem);            
+          }
+
+
+          console.log(angular.toJson(snap.val()));
+        });
+      usersRef.child(myId)
+        .child("recvMsg")
+        .on('child_added', function(snap) {
+          console.log(angular.toJson(snap.val()));
+        });        
+    },
     sessionStart: function(peerUserId) {
       $rootScope.myAccountInfo.currChat = []; 
       var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');

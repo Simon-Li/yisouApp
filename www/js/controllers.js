@@ -403,7 +403,7 @@ angular.module('appYiSou.controllers', [])
     d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
     */
     var msg = {};
-    msg.recvId = $stateParams.userId;
+    //msg.recvId = $stateParams.userId;
     msg.media = 'text';
     msg.time = Firebase.ServerValue.TIMESTAMP;
     msg.content = $scope.data.message;
