@@ -375,8 +375,10 @@ angular.module('appYiSou.controllers', [])
 
 })
 
-.controller('ChatsCtrl', function($scope) {
-  
+.controller('ChatsCtrl', function($scope, $state) {
+  $scope.chat = function(peerId) {
+    $state.go("app.chat", {userId: peerId, listId: "null"});
+  }
 })
 
 .controller('ChatCtrl', function($scope, $rootScope, $state, $stateParams, $timeout, $ionicScrollDelegate, MsgService) {
@@ -403,7 +405,7 @@ angular.module('appYiSou.controllers', [])
     d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
     */
     var msg = {};
-    //msg.recvId = $stateParams.userId;
+    msg.recvId = $stateParams.userId;
     msg.media = 'text';
     msg.time = Firebase.ServerValue.TIMESTAMP;
     msg.content = $scope.data.message;
