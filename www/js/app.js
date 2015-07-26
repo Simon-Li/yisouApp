@@ -418,6 +418,8 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
     getChatsList: function() {
       $rootScope.chatsList = [];
       var myId = $rootScope.myAccountInfo.userId.replace(/\./g, ',');
+      var deferred = $q.defer();
+
       usersRef.child(myId)
         .child("sendMsg")
         .on('child_added', function(snap) {
@@ -429,25 +431,27 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
             usersRef.child(snap.key()).child("name").once('value', function(snap) { 
               $rootScope.chatsList.push({peerId: peerId, peerName: snap.val()});
               console.log(angular.toJson({peerId: peerId, peerName: snap.val()}));
+              deferred.resolve('done');
             });
           }
           
         });
-      usersRef.child(myId)
-        .child("recvMsg")
-        .on('child_added', function(snap) {
-          var peerId = snap.key().replace(/\,/g, '.');
-          console.log('recvMsg peerId: '+peerId);
-          //var lastMsgTime = "";
-          if (_.find($rootScope.chatsList, 'peerId', peerId) === undefined) {
-            // new peer, added into the chats list
-            usersRef.child(snap.key()).child("name").once('value', function(snap) { 
-              $rootScope.chatsList.push({peerId: peerId, peerName: snap.val()});
-              console.log(angular.toJson({peerId: peerId, peerName: snap.val()}));
-            });
-          }
-
-        });        
+      deferred.promise.then(function(done) {
+        usersRef.child(myId)
+          .child("recvMsg")
+          .on('child_added', function(snap) {
+            var peerId = snap.key().replace(/\,/g, '.');
+            console.log('recvMsg peerId: '+peerId);
+            //var lastMsgTime = "";
+            if (_.find($rootScope.chatsList, 'peerId', peerId) === undefined) {
+              // new peer, added into the chats list
+              usersRef.child(snap.key()).child("name").once('value', function(snap) { 
+                $rootScope.chatsList.push({peerId: peerId, peerName: snap.val()});
+                console.log(angular.toJson({peerId: peerId, peerName: snap.val()}));
+              });
+            }
+          });
+      });
     },
     sessionStart: function(peerUserId) {
       $rootScope.myAccountInfo.currChat = []; 
