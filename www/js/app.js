@@ -217,6 +217,18 @@ angular.module('appYiSou', ['ionic', 'ionic.service.core', 'ionic.service.analyt
       requireLogin: true
     }    
   })  
+  .state('app.nearby', {
+    url: "/nearby",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/nearby.html",
+        controller: 'NearbyCtrl'
+      }
+    },
+    data: {
+      requireLogin: true
+    }    
+  })
   .state('app.settings', {
     url: "/settings",
     views: {

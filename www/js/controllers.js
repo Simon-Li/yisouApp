@@ -514,6 +514,10 @@ angular.module('appYiSou.controllers', [])
   console.info("enter into list view, listId: "+$stateParams.listId+', ownerId: '+$stateParams.userId);
 })
 
+.controller('NearbyCtrl', function($scope, $state) {
+  
+})
+
 .controller('ProfileCtrl', function($scope, $state, $rootScope) {
   //$scope.email = $rootScope.g_auth.password.email;
 
